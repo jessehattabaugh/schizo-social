@@ -1,0 +1,55 @@
+:root {
+	--background-color: black;
+	--color: white;
+	--error: orange;
+	--font-family-heading:'Courier New', Courier, monospace;
+	--font-family: Geneva, Verdana, sans-serif;
+	--theme: red;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+	margin: 0;
+	padding: 0;
+}
+html{
+	background-color: var(--background-color);
+	box-sizing: border-box;
+	color: var(--color);
+	font-family: var(--font-family);
+	height: 100%;
+}
+body {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+main {
+	flex: 1;
+}
+main > * {
+	margin: 1em;
+}
+a:active,
+a:focus,
+a:link,
+a:visited {
+	color: var(--theme);
+	text-decoration: none;
+
+}
+a:hover {
+	text-decoration: underline;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: var(--theme);
+	font-family: var(--font-family-heading);
+}
+

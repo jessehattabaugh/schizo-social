@@ -1,0 +1,30 @@
+{
+	"author": "Jesse Hattabaugh<jessehattabaugh@protonmail.com>",
+	"devDependencies": {
+		"@architect/architect": "latest",
+		"@architect/eslint-config": "latest",
+		"@architect/sandbox": "latest",
+		"@enhance/arc-plugin-enhance": "latest",
+		"@enhance/types": "latest",
+		"eslint": "latest",
+		"eslint-config-prettier": "latest",
+		"node-fetch": "latest",
+		"tap-arc": "latest",
+		"tape": "latest",
+		"tiny-json-http": "latest"
+	},
+	"engines": {
+		"node": "~16",
+		"npm": "~8"
+	},
+	"license": "UNLICENSED",
+	"name": "schizo-social",
+	"private": true,
+	"scripts": {
+		"production": "arc deploy --production",
+		"staging": "arc deploy",
+		"start": "arc sandbox",
+		"test": "tape 'test.mjs' | tap-arc"
+	},
+	"version": "0.0.0"
+}

@@ -1,0 +1,22 @@
+{
+	"background_color": "#000000",
+	"display": "standalone",
+	"icons": [
+		{
+			"purpose": "any maskable",
+			"sizes": "192x192",
+			"src": "/_public/logo192.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "any maskable",
+			"sizes": "512x512",
+			"src": "/_public/logo512.png",
+			"type": "image/png"
+		}
+	],
+	"name": "schizo.social",
+	"short_name": "schizo",
+	"start_url": "/?start",
+	"theme_color": "#ff0000"
+}

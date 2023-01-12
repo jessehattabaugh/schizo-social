@@ -1,0 +1,16 @@
+{
+	"env": {
+		"browser": true,
+		"es2021": true,
+		"worker": true
+	},
+	"extends": ["@architect/eslint-config", "eslint:recommended", "prettier"],
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"root": true,
+	"rules": {
+		"no-unused-vars": "warn"
+	}
+}
