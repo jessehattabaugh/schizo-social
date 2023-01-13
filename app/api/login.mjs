@@ -6,14 +6,21 @@ export async function get(req) {
 	const { session } = req;
 
 	// get error and host from prior posts
-	const { error, host } = session;
-	console.debug('📤', { error, host });
+	const { error, host, access_token } = session;
+	console.debug('📤', { error, host, access_token });
 
-	return {
-		json: { error, host },
-		// reset the session
-		session: {},
-	};
+	if (access_token) {
+		return {
+			location: '/home',
+		};
+	} else {
+		return {
+			json: { error, host },
+			// reset the session
+			session: {},
+		};
+	}
+
 }
 
 /** @type {import('@enhance/types').EnhanceApiFn} */

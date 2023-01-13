@@ -1,3 +1,14 @@
+// import enhance from '@enhance/element';
+// import SSTimeline from '../elements/ss-timeline.mjs';
+
+// enhance('ss-timeline', {
+// 	connected() {
+// 		console.debug('⌚');
+// 		// setTimeout refresh the timeline
+// 	},
+// 	render: SSTimeline,
+// });
+
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', async () => {
 		try {

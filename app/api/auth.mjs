@@ -6,13 +6,14 @@ const redirect_uri = `https://${name}/auth`;
 export async function get(req) {
 	const { session } = req;
 	const { host, client_id, client_secret } = session;
+	let { access_token } = session;
 	const { code } = req.query;
 	console.debug('🔑 GET /auth', { code, host, client_id, client_secret });
+
 	if (code && host && client_id && client_secret) {
 		// get a token
 		// https://docs.joinmastodon.org/methods/oauth/#token
 
-		var access_token;
 		try {
 			const body = new URLSearchParams();
 			body.set('client_id', client_id);
@@ -51,7 +52,9 @@ export async function get(req) {
 			console.error('🍓', error);
 		}
 		console.debug('🍏', { access_token });
+	}
 
+	if (access_token) {
 		// Confirm that the app’s OAuth2 credentials work.
 		// https://docs.joinmastodon.org/methods/apps/#verify_credentials
 
@@ -75,21 +78,17 @@ export async function get(req) {
 			console.error('🍅', error);
 		}
 		console.debug('🍇', { vapid_key, name, website });
-		if (vapid_key) {
-			return {
-				json: { access_token, code, vapid_key, name, website },
-				session: { access_token, ...session },
-			};
-		} else {
-			return {
-				location: '/login',
-				session: { error: 'auth token invalid', ...session },
-			};
-		}
+	}
+
+	if (access_token && vapid_key) {
+		return {
+			json: { access_token, code, vapid_key, name, website },
+			session: { access_token, ...session },
+		};
 	} else {
 		return {
 			location: '/login',
-			session: { error: 'no code or client_id', ...session },
+			session: { error: 'access token unverified', ...session },
 		};
 	}
 }
