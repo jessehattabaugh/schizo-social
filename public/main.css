@@ -29,9 +29,6 @@ body {
 main {
 	flex: 1;
 }
-main > * {
-	margin: 1em;
-}
 a:active,
 a:focus,
 a:link,

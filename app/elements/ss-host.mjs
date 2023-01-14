@@ -11,9 +11,17 @@ export default function ({ html, state }) {
 			}
 		</style>
 		<datalist id="hosts">
+			<option value="counter.social"></option>
 			<option value="mas.to"></option>
-			<option value="quo.to"></option></datalist
-		><label for="host">Your ActivityPub host:</label>
+			<option value="mastodon.cloud"></option>
+			<option value="mastodon.online"></option>
+			<option value="mastodon.social"></option>
+			<option value="mastodon.world"></option>
+			<option value="mstdn.jp"></option>
+			<option value="mstdn.social"></option>
+			<option value="pawoo.net"></option>
+			<option value="home.social"></option></datalist
+		><label for="host">Your Mastodon host:</label>
 		<div>
 			http://
 			<input

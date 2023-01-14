@@ -82,7 +82,8 @@ export async function get(req) {
 
 	if (access_token && vapid_key) {
 		return {
-			json: { access_token, code, vapid_key, name, website },
+			//json: { access_token, code, vapid_key, name, website },
+			location: '/home',
 			session: { access_token, ...session },
 		};
 	} else {

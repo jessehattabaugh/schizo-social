@@ -1,5 +1,6 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
-export default function ({ html }) {
+export default function ({ html, state }) {
+	const { access_token } = state.store;
 	return html`<style>
 			header {
 				border-bottom: solid 0.5em var(--theme);
@@ -29,6 +30,9 @@ export default function ({ html }) {
 			<h1><a href="/">😾schizo.social</a></h1>
 		</header>
 		<nav>
-			<a href="/login">login</a>
+			${access_token
+				? `<a href="/home">home</a>
+					<a href="/public">public</a>`
+				: `<a href="/login">login</a>`}
 		</nav>`;
 }
