@@ -20,12 +20,12 @@ export default function ({ html, state }) {
 				margin-bottom: 1em;
 			}
 			.u-photo {
+				box-shadow: 0.1em 0.1em 0.02em black;
 				min-width: 3em;
 				vertical-align: middle;
-				box-shadow: 0.1em 0.1em 0.1em black;
 			}
 			.attachment {
-				max-width: 100%;
+				max-width: 25%;
 			}
 			section {
 				clear: both;
@@ -35,12 +35,13 @@ export default function ({ html, state }) {
 				font-family: var(--font-family-heading);
 			}
 			details {
-				background-size: cover;
 				background-position: center;
+				background-size: cover;
 				font-family: var(--font-family-heading);
+				font-weight: bold;
 				margin-bottom: 0.5em;
 				padding: 0.5em;
-				text-shadow: 0.05em 0.05em 0.04em black;
+				text-shadow: 0.05em 0.05em 0.02em black;
 			}
 			.p-name {
 				display: inline;
@@ -49,16 +50,19 @@ export default function ({ html, state }) {
 					-0.04em 0.04em 0.01em white, 0.04em -0.04em 0.01em white, 0 0.04em 0.01em white,
 					0 -0.04em 0.01em white, 0.04em 0 0.01em white, -0.04em 0 0.01em white;
 			}
-			picture {
-				margin-bottom: 1em;
-			}
-			
 			h5 {
+				align-items: center;
 				display: flex;
 				justify-content: space-between;
 			}
-			h5 > * {
-				padding: 0.5em;
+			h5 > a {
+				padding: 1em;
+			}
+			h5 > a:first-of-type {
+				flex: 1;
+			}
+			.note {
+				margin-top: 1em;
 			}
 		</style>
 		<div class="h-feed">
@@ -81,25 +85,16 @@ export default function ({ html, state }) {
 											/>
 											<h3 class="p-name">${status.account.display_name}</h3>
 										</summary>
-										${status.account.note}
+										<div class="note">
+											${status.account.note}
+										</div>
 									</details>
 								</header>
-
-								<h5>
-									<a class="p-author u-url" href="${status.account.url}">
-										${status.account.username}
-									</a>
-									<a class="u-url" href="${status.url}">
-										<time class="dt-published" datetime="${status.created_at}">
-											${new Date(status.created_at).toLocaleString()}</time
-										>
-									</a>
-								</h5>
 								${
 									status.spoiler_text &&
 									`<section class="spoiler_text">
-										${status.spoiler_text}
-									</section>`
+									${status.spoiler_text}
+								</section>`
 								}
 								<section class="e-content">${status.content}</section>
 								${status.media_attachments
@@ -119,6 +114,18 @@ export default function ({ html, state }) {
 											/></picture>`,
 									)
 									.join('\n')}
+								<h5>
+									<span>^ by</span>
+									<a class="p-author u-url" href="${status.account.url}">
+										${status.account.username}
+									</a>
+									<span>at</span>
+									<a class="u-url" href="${status.url}">
+										<time class="dt-published" datetime="${status.created_at}">
+											${new Date(status.created_at).toLocaleString()}</time
+										>
+									</a>
+								</h5>
 						  </article>`
 						: ``,
 				)

@@ -10,6 +10,7 @@ export default function ({ html }) {
 				content: '•';
 			}
 		</style>
+		<ss-nav></ss-nav>
 		<footer>
 			<a href="https://mas.to/@schizanon">schizanon</a> &copy; 2023
 			<a href="/terms">Terms of Service</a>

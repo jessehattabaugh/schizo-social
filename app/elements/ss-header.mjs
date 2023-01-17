@@ -1,7 +1,5 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { access_token } = state.store;
-	const { active } = state.attrs;
 	return html`<style>
 			header {
 				border-bottom: solid 0.5em var(--theme);
@@ -16,9 +14,6 @@ export default function ({ html, state }) {
 				padding: 0.1em;
 				text-decoration: none;
 			}
-			nav {
-				text-align: right;
-			}
 			nav a:active,
 			nav a:focus,
 			nav a:link,
@@ -32,10 +27,5 @@ export default function ({ html, state }) {
 		<header>
 			<h1><a href="/">😾schizo.social</a></h1>
 		</header>
-		<nav>
-			${access_token
-				? `<a href="/home" class="${active == 'home' && 'active'}">home</a>
-					<a href="/public" class="${active == 'public' && 'active'}">public</a>`
-				: `<a href="/login">login</a>`}
-		</nav>`;
+		<ss-nav></ss-nav>`;
 }
