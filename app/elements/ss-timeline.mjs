@@ -52,9 +52,7 @@ export default function ({ html, state }) {
 			picture {
 				margin-bottom: 1em;
 			}
-			.e-content p {
-				margin-bottom: 1em;
-			}
+			
 			h5 {
 				display: flex;
 				justify-content: space-between;

@@ -52,3 +52,11 @@ h6 {
 	font-family: var(--font-family-heading);
 }
 
+p {
+	margin-bottom: 1em;
+}
+
+ol li {
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
