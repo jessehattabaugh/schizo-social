@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
 :root {
 	--background-color: black;
 	--color: white;
 	--error: orange;
-	--font-family-heading:'Courier New', Courier, monospace;
+	--font-family-heading: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
 	--font-family: Geneva, Verdana, sans-serif;
 	--theme: red;
 }

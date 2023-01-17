@@ -5,56 +5,126 @@ export default function ({ html, state }) {
 	console.debug('⌛', { access_token, error, statuses: statuses.length });
 
 	return html`<style>
+			.h-feed {
+				align-items: center;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-evenly;
+			}
 			.h-entry {
-				padding: 0.5em;
-				overflow-x: hidden;
 				border-bottom: 1px solid grey;
+				max-width: 600px;
+				overflow-x: hidden;
+			}
+			.h-card {
+				margin-bottom: 1em;
 			}
 			.u-photo {
-				float: left;
-				max-width: 3em;
-				margin: 0.5em;
+				min-width: 3em;
+				vertical-align: middle;
+				box-shadow: 0.1em 0.1em 0.1em black;
 			}
 			.attachment {
 				max-width: 100%;
 			}
-			.p-name {
-				float: left;
+			section {
+				clear: both;
+				padding: 0.5em;
 			}
-			.timestamp {
-				text-align: right;
+			.spoiler_text {
+				font-family: var(--font-family-heading);
+			}
+			details {
+				background-size: cover;
+				background-position: center;
+				font-family: var(--font-family-heading);
+				margin-bottom: 0.5em;
+				padding: 0.5em;
+				text-shadow: 0.05em 0.05em 0.04em black;
+			}
+			.p-name {
+				display: inline;
+				font-size: calc(max(200%, 1.3em));
+				text-shadow: 0.04em 0.04em 0.01em white, -0.04em -0.04em 0.01em white,
+					-0.04em 0.04em 0.01em white, 0.04em -0.04em 0.01em white, 0 0.04em 0.01em white,
+					0 -0.04em 0.01em white, 0.04em 0 0.01em white, -0.04em 0 0.01em white;
+			}
+			picture {
+				margin-bottom: 1em;
+			}
+			.e-content p {
+				margin-bottom: 1em;
+			}
+			h5 {
+				display: flex;
+				justify-content: space-between;
+			}
+			h5 > * {
+				padding: 0.5em;
 			}
 		</style>
-		<ol class="h-feed">
+		<div class="h-feed">
 			${statuses
-				.map(
-					(status) =>
-						`<li class="h-entry">
-							<pre style="display: none;">${JSON.stringify(status)}</pre>
-							<aside class="h-card">
-								<a class="p-author u-url" href="${status.account.url}">
-									<img class="u-photo" src="${status.account.avatar}" />
-									<h4 class="p-name">${status.account.display_name}</h4>
-									<h5>(${status.account.acct})</h5>
-								</a>
-							</aside>
-							<article class="e-content">${status.content}</article>
-							${status.media_attachments
-								.map(
-									(attachment) =>
-										attachment.type == 'image' &&
-										`<img class="attachment" src="${attachment.url}" alt="${attachment.description}" />`,
-								)
-								.join('\n')}
-							<h6 class="timestamp">
-								<a class="u-url" href="${status.url}">
-								<time class="dt-published" datetime="${status.created_at}">
-								${new Date(status.created_at).toLocaleString()}</time>
-								</a>
-							</h6>
-						</li>`,
+				.map((status) =>
+					status.language === 'en'
+						? `<article class="h-entry">
+								<header class="h-card">
+									<details
+										style="background-image: url('${status.account.header}')"
+									>
+										<summary>
+											<img
+												alt="${status.account.display_name}"
+												class="u-photo"
+												height="10%"
+												loading="lazy"
+												src="${status.account.avatar}"
+												width="10%"
+											/>
+											<h3 class="p-name">${status.account.display_name}</h3>
+										</summary>
+										${status.account.note}
+									</details>
+								</header>
+
+								<h5>
+									<a class="p-author u-url" href="${status.account.url}">
+										${status.account.username}
+									</a>
+									<a class="u-url" href="${status.url}">
+										<time class="dt-published" datetime="${status.created_at}">
+											${new Date(status.created_at).toLocaleString()}</time
+										>
+									</a>
+								</h5>
+								${
+									status.spoiler_text &&
+									`<section class="spoiler_text">
+										${status.spoiler_text}
+									</section>`
+								}
+								<section class="e-content">${status.content}</section>
+								${status.media_attachments
+									.map(
+										(attachment) =>
+											attachment.type == 'image' &&
+											`<picture>
+												<source
+													media="(min-width: 600px)"
+													srcset="${attachment.url}" />
+												<img
+													alt="${attachment.description || 'no description'}"
+													class="attachment"
+													loading="lazy"
+													src="${attachment.preview_url}"
+													width="100%"
+											/></picture>`,
+									)
+									.join('\n')}
+						  </article>`
+						: ``,
 				)
 				.join('\n')}
-		</ol>
+		</div>
 		${error && `<div class="error">${error}</div>`}`;
 }

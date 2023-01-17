@@ -17,6 +17,6 @@
 	],
 	"name": "schizo.social",
 	"short_name": "schizo",
-	"start_url": "/?start",
+	"start_url": "/login?pwa_start_url",
 	"theme_color": "#ff0000"
 }

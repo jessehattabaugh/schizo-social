@@ -9,6 +9,15 @@ export default function ({ html, state }) {
 			.error {
 				color: var(--error);
 			}
+			div {
+				padding: 0.5em;
+			}
+			label {
+				margin: 1em;
+			}
+			input {
+				font-size: calc(max(5vw, 1.5em));
+			}
 		</style>
 		<datalist id="hosts">
 			<option value="counter.social"></option>

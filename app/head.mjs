@@ -12,7 +12,7 @@ export default function Head(state) {
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 				<title>${name}${path}</title>
-				<meta name="description" content="" />
+				<meta name="description" content="mastodon client with a focus on performance" />
 				<meta name="theme-color" content="#000000" />
 
 				<link rel="icon" href="/_public/logo.svg" />

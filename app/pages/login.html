@@ -1,5 +1,15 @@
 <ss-header></ss-header>
 <main>
+	<style>
+		form {
+			overflow-y: hidden;
+		}
+		[type=submit]{
+			font-size: 1.25em;
+			padding: 0.25em;
+			margin: 1em;
+		}
+	</style>
 	<form method="post" action="/login" onsubmit="
 		console.debug('📬', this, event)">
 		<ss-host></ss-host>
