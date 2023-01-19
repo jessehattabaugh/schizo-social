@@ -6,18 +6,30 @@ export default function ({ html, state }) {
 
 	return html`<style>
 			.h-feed {
-				align-items: center;
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: space-evenly;
+				column-count: 1;
+				column-gap: 0.25em;
 			}
 			.h-entry {
-				border-bottom: 1px solid grey;
-				max-width: 600px;
+				border: 1px inset grey;
+				border-radius: 0.25em;
+				margin: 0.5em 0.1em;
 				overflow-x: hidden;
+				width: 100%;
 			}
-			.h-card {
-				margin-bottom: 1em;
+			@media (min-width: 600px) {
+				.h-feed {
+					column-count: 2;
+				}
+			}
+			@media (min-width: 1200px) {
+				.h-feed {
+					column-count: 3;
+				}
+			}
+			@media (min-width: 1800px) {
+				.h-feed {
+					column-count: 4;
+				}
 			}
 			.u-photo {
 				box-shadow: 0.1em 0.1em 0.02em black;
@@ -39,7 +51,6 @@ export default function ({ html, state }) {
 				background-size: cover;
 				font-family: var(--font-family-heading);
 				font-weight: bold;
-				margin-bottom: 0.5em;
 				padding: 0.5em;
 				text-shadow: 0.05em 0.05em 0.02em black;
 			}

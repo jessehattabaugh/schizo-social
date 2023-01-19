@@ -6,6 +6,12 @@ export default function ({ html, state }) {
 			nav {
 				text-align: right;
 			}
+			a {
+				border: outset 1psx grey;
+				display: inline-block;
+				font-size: larger;
+				padding: 1em;
+			}
 		</style>
 		<nav>
 			${access_token
