@@ -9,8 +9,20 @@ export async function get(req) {
 	if (access_token) {
 		const response = await timeline(access_token, 'home', host);
 		if (response.ok) {
-			const statuses = await response.json();
-			//console.debug('🌞', statuses);
+			const data = await response.json();
+
+			// @ts-ignore
+			const statuses = data.reduce(
+				(
+					/** @type {{ [x: string]: any; }} */ _,
+					/** @type {{ id: string | number; }} */ status,
+				) => {
+					_[status.id] = status;
+					return _;
+				},
+				{},
+			);
+			console.debug('🌞', statuses);
 			return {
 				json: { access_token, statuses },
 			};
