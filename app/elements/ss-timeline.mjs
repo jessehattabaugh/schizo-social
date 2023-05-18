@@ -1,8 +1,9 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { access_token, error, statuses } = state.store;
+	const { access_token, error, statuses = {} } = state.store;
 	const statusIds = Object.keys(statuses);
-	console.debug('⌛', { access_token, error, statusIds });
+	const [lastId] = statusIds.slice(-1);
+	console.debug('⌛', { access_token, error, statusIds, lastId });
 
 	return html`<style>
 			.h-feed {
@@ -29,11 +30,24 @@ export default function ({ html, state }) {
 					column-count: 5;
 				}
 			}
+			@media (min-width: 3000px) {
+				.h-feed {
+					column-count: 6;
+				}
+			}
+			li {
+				list-style: none;
+			}
+			#nextLink {
+				font-size: larger;
+				padding: 0.5em;
+			}
 		</style>
-		<div class="h-feed">
+		<ol class="h-feed">
 			${statusIds
-				.map((statusId) => `<ss-status status_id="${statusId}"></ss-status>`)
+				.map((statusId) => `<li><ss-status status_id="${statusId}"></ss-status></li>`)
 				.join('\n')}
-		</div>
+		</ol>
+		<a id="nextLink" href="?from=${lastId}">Next</a>
 		${error && `<div class="error">${error}</div>`}`;
 }

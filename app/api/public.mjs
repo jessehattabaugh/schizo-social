@@ -4,10 +4,11 @@ import { timeline } from '../mastodon.mjs';
 export async function get(req) {
 	const { session } = req;
 	const { access_token, host } = session;
-	console.debug('📢', { access_token, host });
+	const { from } = req.query;
+	console.debug('📢', { access_token, host, from });
 
 	if (access_token) {
-		const response = await timeline(access_token, 'public', host);
+		const response = await timeline(access_token, 'public', host, from);
 		if (response.ok) {
 			const data = await response.json();
 
