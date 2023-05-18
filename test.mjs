@@ -3,7 +3,7 @@ import { get } from 'tiny-json-http';
 import { start, end } from '@architect/sandbox';
 
 const host = 'http://localhost:3333';
-const endpoints = ['/login', '/auth'];
+const endpoints = ['/', '/login', '/home', '/public'];
 
 test('check key paths', async (t) => {
 	t.pass(await start({ quiet: true }));

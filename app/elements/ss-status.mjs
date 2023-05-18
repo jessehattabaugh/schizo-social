@@ -11,9 +11,12 @@ export default function ({ html, state }) {
 				.h-entry {
 					border: 1px inset grey;
 					border-radius: 0.25em;
-					margin: 0.5em 0.1em;
+					margin: 1em 0;
 					overflow-x: hidden;
 					width: 100%;
+				}
+				.h-card {
+					border-bottom: 1px outset grey;
 				}
 				.u-photo {
 					box-shadow: 0.1em 0.1em 0.02em black;
@@ -53,9 +56,10 @@ export default function ({ html, state }) {
 				}
 				h5 > a {
 					padding: 1em;
-				}
-				h5 > a:first-of-type {
 					flex: 1;
+				}
+				h5 > *:last-child {
+					text-align: right;
 				}
 				.note {
 					margin-top: 1em;
@@ -68,6 +72,7 @@ export default function ({ html, state }) {
 							<img
 								alt="${status.account.display_name}"
 								class="u-photo"
+								fetchpriority="high"
 								height="10%"
 								loading="lazy"
 								src="${status.account.avatar}"
@@ -103,14 +108,12 @@ export default function ({ html, state }) {
 					)
 					.join('\n')}
 				<h5>
-					<span>^ by</span>
 					<a class="p-author u-url" href="${status.account.url}">
-						${status.account.username}
+						^ by ${status.account.username}
 					</a>
-					<span>at</span>
-					<a class="u-url" href="${status.url}">
+					<a class="u-url" href="${status.url}" style="text-align: right;">
 						<time class="dt-published" datetime="${status.created_at}">
-							${new Date(status.created_at).toLocaleString()}</time
+							at ${new Date(status.created_at).toLocaleString()}</time
 						>
 					</a>
 				</h5>
