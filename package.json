@@ -15,15 +15,15 @@
 		"tiny-json-http": "latest"
 	},
 	"engines": {
-		"node": "~16",
-		"npm": "~8"
+		"node": "~18",
+		"npm": "~9"
 	},
 	"license": "UNLICENSED",
 	"name": "schizo-social",
 	"private": true,
 	"scripts": {
-		"production": "arc deploy --production",
-		"staging": "arc deploy",
+		"prod": "arc deploy --production",
+		"stage": "arc deploy",
 		"start": "arc sandbox",
 		"test": "tape 'test.mjs' | tap-arc"
 	},

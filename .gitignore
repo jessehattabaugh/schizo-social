@@ -1,5 +1,7 @@
 .enhance
+.env
 node_modules
-public/pages
+prefs.arc
+public/browser
 sam.json
 sam.yaml

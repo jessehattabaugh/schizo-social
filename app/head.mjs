@@ -22,6 +22,6 @@ export default function Head(state) {
 				<link rel="stylesheet" href="/_public/main.css" />
 				<link rel="manifest" href="/_public/manifest.json">
 
-				<script async type="module" src="/_public/pages/async.mjs"></script>
+				<script async type="module" src="/_public/browser/async.mjs"></script>
 			</head>`;
 }

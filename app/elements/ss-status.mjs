@@ -92,9 +92,10 @@ export default function ({ html, state }) {
 					.map(
 						(
 							/** @type {{ type: string; url: any; description: any; preview_url: any; }} */ attachment,
-						) =>
-							attachment.type == 'image' &&
-							`<picture>
+						) => {
+							return (
+								attachment.type == 'image' &&
+								`<picture>
 					<source
 						media="(min-width: 600px)"
 						srcset="${attachment.url}" />
@@ -104,7 +105,9 @@ export default function ({ html, state }) {
 						loading="lazy"
 						src="${attachment.preview_url}"
 						width="100%"
-				/></picture>`,
+				/></picture>`
+							);
+						},
 					)
 					.join('\n')}
 				<h5>

@@ -23,7 +23,7 @@ export async function get(req) {
 				},
 				{},
 			);
-			//console.debug('🌞', statuses);
+			// console.debug('🌞', statuses);
 			return {
 				json: { access_token, statuses },
 			};
