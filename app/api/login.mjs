@@ -29,8 +29,7 @@ export async function post(req) {
 
 	// https://docs.joinmastodon.org/client/token/
 
-	// load an already existing client id for this host
-	// from a database or the session or something
+	// todo: load an already existing app for this host from a database or the session or something
 
 	// create a new app on this host
 	const website = `https://${name}`;

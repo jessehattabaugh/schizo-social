@@ -7,7 +7,7 @@ export default function ({ html, state }) {
 				text-align: right;
 			}
 			a {
-				border: outset 1psx grey;
+				border: outset 1px grey;
 				display: inline-block;
 				font-size: larger;
 				padding: 1em;

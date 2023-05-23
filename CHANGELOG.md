@@ -1,5 +1,17 @@
 # Change Log
 
+## May 18th 2023
+
+I kinda lost interest in this project. I tried to implement @enhance/element but it didn't feel right. It seemed like maybe the server wasn't the right place to do all this.
+
+I've since created a few more Fediverse accounts, and now I think I want to make this an app for checking multiple ActivityPub accounts with one feed.
+
+First thing I need to do is figure out why I can't login with my Calckey.social account.
+
+Then I need a way to manage multiple logins simultaneously. Currently, the oauth access_token of the server you authenticate with is essentially your login token. This is stored in your session and sticks with you thanks to a cookie. I'll need to refactor so that it can contain multiple tokens.
+
+Lastly, I still have to deal with updating feeds, but if I'm not going to do it on the client side --especially if I'm going to be streaming multiple feeds--I think I will need to implement a web socket connection to stream the items in.
+
 ## January 26th 2023
 
 Creating the "from" query and linking to it was easy!
