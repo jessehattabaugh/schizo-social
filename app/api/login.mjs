@@ -23,9 +23,26 @@ export async function get(req) {
 
 }
 
-/** @type {import('@enhance/types').EnhanceApiFn} */
+/**
+ * handles the POST request from the /login form
+ * @type {import('@enhance/types').EnhanceApiFn}
+ */
 export async function post(req) {
 	const { host } = req.body;
+
+	// fetch the .well-known/nodeinfo.json file
+	try {
+		const response = await fetch(`https://${host}/.well-known/nodeinfo.json`);
+		if (response.ok) {
+			const data = await response.json();
+			console.debug('📩', { host, data });
+		} else {
+			console.error('🍅', response);
+			throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+		}
+	} catch (error) {
+		console.error('⛔', error);
+	}
 
 	// https://docs.joinmastodon.org/client/token/
 
