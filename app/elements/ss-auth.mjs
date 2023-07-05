@@ -1,12 +1,14 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { error, access_token, vapid_key, name, website } = state.store;
-	console.debug('📝', { error, access_token, vapid_key, name, website });
+	const { store } = state;
+	console.debug('📝 ss-auth store', store);
 
-	// Confirm that the app’s OAuth2 credentials work.
+	const { error, access_token, vapid_key, name, website } = store;
+
+	// TODO: Confirm that the app’s OAuth2 credentials work.
 
 	return html`<details>
-			<summary>You are ${!access_token && 'not'} authenticated</summary>
+			<summary>You are ${!access_token && 'not '}authenticated</summary>
 			<dl>
 				<dt>access_token</dt>
 				<dd>${access_token}</dd>

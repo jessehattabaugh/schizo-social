@@ -4,10 +4,10 @@ import { name, scopes } from '../constants.mjs';
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(req) {
 	const { session } = req;
+	console.debug('📤 api/login get() session', session);
 
 	// get error and host from prior posts
-	const { error, host, access_token } = session;
-	console.debug('📤', { error, host, access_token });
+	const { error, host, access_token } = req.session;
 
 	if (access_token) {
 		return {
@@ -20,7 +20,6 @@ export async function get(req) {
 			session: {},
 		};
 	}
-
 }
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
@@ -34,7 +33,7 @@ export async function post(req) {
 	// create a new app on this host
 	const website = `https://${name}`;
 	const redirect_uri = `${website}/auth`;
-	var client_id, client_secret, id, vapid_key;
+	let client_id, client_secret, id, vapid_key;
 	try {
 		const body = new URLSearchParams();
 		body.set('client_name', name);
@@ -52,25 +51,26 @@ export async function post(req) {
 		/** @type {AppsResponse} */
 		const data = await response.json();
 		if (response.ok) {
-			console.debug('💎', data);
+			console.debug('💎 api/login post() fetch success:', data);
 			({ client_id, client_secret, id, vapid_key } = data);
 		} else {
-			console.error('🍅', data);
+			console.error('🍅 api/login post() fetch failure:', data);
 			throw new Error(`Request failed: ${response.status} ${response.statusText}`);
 		}
-	} catch (error) {
-		console.error('⛔', error);
-	}
-	console.debug('💸', { client_id, client_secret, id, vapid_key });
+		const params = new URLSearchParams();
+		params.set('client_id', client_id);
+		params.set('redirect_uri', redirect_uri);
+		params.set('response_type', 'code');
+		params.set('scope', scopes);
+		const location = `https://${host}/oauth/authorize?${params.toString()}`;
+		console.debug('📩 api/login post() location:', location);
 
-	const params = new URLSearchParams();
-	params.set('client_id', client_id);
-	params.set('redirect_uri', redirect_uri);
-	params.set('response_type', 'code');
-	params.set('scope', scopes);
-	console.debug('📩', { host, params });
-	return {
-		location: `https://${host}/oauth/authorize?${params.toString()}`,
-		session: { client_id, client_secret, host, id, vapid_key },
-	};
+		const session = { client_id, client_secret, host, id, vapid_key };
+		console.debug('💸 api/login post() session:', session);
+
+		return { location, session };
+	} catch (error) {
+		console.error('⛔api/login post() returning error', error);
+		return { json: { error, host, website, redirect_uri } };
+	}
 }
