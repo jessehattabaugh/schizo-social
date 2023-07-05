@@ -2,9 +2,9 @@
 export default function ({ html, state }) {
 	const { status_id } = state.attrs;
 	const { statuses } = state.store;
-	const statusIds = Object.keys(statuses);
+	// const statusIds = Object.keys(statuses);
 	const status = statuses[status_id];
-	console.debug('🛻', { status_id, statusIds, status });
+	console.debug('🛻 ss-status', status);
 	const {
 		content,
 		created_at,
@@ -39,8 +39,13 @@ export default function ({ html, state }) {
 					min-width: 3em;
 					vertical-align: middle;
 				}
+				.attachments {
+					display: grid;
+					grid-gap: 0.5em;
+					grid-template-columns: repeat(auto-fit, minmax(calc(50% - 0.5em), 1fr));
+				}
 				.attachment {
-					max-width: 25%;
+					width: 100%;
 				}
 				section {
 					clear: both;
@@ -104,28 +109,31 @@ export default function ({ html, state }) {
 					${spoiler_text}
 				</section>`}
 				<section class="e-content">${content}</section>
-				${media_attachments
-					.map(
-						(
-							/** @type {{ type: string; url: any; description: any; preview_url: any; }} */ attachment,
-						) => {
-							return (
-								attachment.type == 'image' &&
-								`<picture>
+				<section class="attachments">
+					${media_attachments
+						.map(
+							(
+								/** @type {{ type: any; url: any; description: any; preview_url: any; }} */ attachment,
+							) => {
+								const { type, url, description, preview_url } = attachment;
+								return (
+									type == 'image' &&
+									`<picture>
 									<source
 										media="(min-width: 600px)"
-										srcset="${attachment.url}" />
+										srcset="${url}" />
 									<img
-										alt="${attachment.description || 'no description'}"
+										alt="${description || 'no description'}"
 										class="attachment"
 										loading="lazy"
-										src="${attachment.preview_url}"
+										src="${preview_url}"
 										width="100%"
 								/></picture>`
-							);
-						},
-					)
-					.join('\n')}
+								);
+							},
+						)
+						.join('\n')}
+				</section>
 				<h5>
 					<a class="p-author u-url" href="${account_url}"> ^ by ${username} </a>
 					${reblogger &&
