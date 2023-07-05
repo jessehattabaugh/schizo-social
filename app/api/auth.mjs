@@ -8,7 +8,7 @@ export async function get(req) {
 	const { host, client_id, client_secret } = session;
 	let { access_token } = session;
 	const { code } = req.query;
-	console.debug('🔑 GET /auth', { code, host, client_id, client_secret });
+	// console.debug('🔑 GET /auth', { code, host, client_id, client_secret });
 
 	if (code && host && client_id && client_secret) {
 		// get a token
@@ -22,7 +22,7 @@ export async function get(req) {
 			body.set('grant_type', 'authorization_code');
 			body.set('redirect_uri', redirect_uri);
 			body.set('scope', scopes);
-			console.debug('🍑', { body });
+			// console.debug('🍑', { body });
 			const response = await fetch(`https://${host}/oauth/token`, { method: `POST`, body });
 			/**
 			 * @typedef {Object} TokenResponse
@@ -51,14 +51,14 @@ export async function get(req) {
 		} catch (error) {
 			console.error('🍓', error);
 		}
-		console.debug('🍏', { access_token });
+		// console.debug('🍏', { access_token });
 	}
 
 	if (access_token) {
 		// Confirm that the app’s OAuth2 credentials work.
 		// https://docs.joinmastodon.org/methods/apps/#verify_credentials
 
-		var vapid_key, name, website;
+		var vapid_key;
 		try {
 			const response = await fetch(`https://${host}/api/v1/apps/verify_credentials`, {
 				headers: {
@@ -73,16 +73,16 @@ export async function get(req) {
 			 */
 			/** @type {VerifyResponse} */
 			const data = await response.json();
-			({ name, website, vapid_key } = data);
+			({ vapid_key } = data);
 		} catch (error) {
 			console.error('🍅', error);
 		}
-		console.debug('🍇', { vapid_key, name, website });
+		// console.debug('🍇', { vapid_key });
 	}
 
 	if (access_token && vapid_key) {
 		return {
-			// json: { access_token, code, vapid_key, name, website },
+			// json: { access_token, code, vapid_key },
 			location: '/home',
 			session: { access_token, ...session },
 		};

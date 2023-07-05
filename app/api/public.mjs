@@ -5,7 +5,7 @@ export async function get(req) {
 	const { session } = req;
 	const { access_token, host } = session;
 	const { from } = req.query;
-	console.debug('📢', { access_token, host, from });
+	// console.debug('📢', { access_token, host, from });
 
 	if (access_token) {
 		const response = await timeline(access_token, 'public', host, from);
