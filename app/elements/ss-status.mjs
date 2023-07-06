@@ -44,8 +44,16 @@ export default function ({ html, state }) {
 					grid-gap: 0.5em;
 					grid-template-columns: repeat(auto-fit, minmax(calc(50% - 0.5em), 1fr));
 				}
-				.attachment {
+				.attachments picture {
+					max-height: 30em;
+					overflow: hidden;
+				}
+				.attachments picture:nth-child(2n + 1):last-child {
+					grid-column: 1 / -1;
+				}
+				.attachments img {
 					width: 100%;
+					height: auto;
 				}
 				section {
 					clear: both;
@@ -124,10 +132,8 @@ export default function ({ html, state }) {
 										srcset="${url}" />
 									<img
 										alt="${description || 'no description'}"
-										class="attachment"
 										loading="lazy"
 										src="${preview_url}"
-										width="100%"
 								/></picture>`
 								);
 							},
