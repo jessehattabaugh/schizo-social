@@ -10,4 +10,4 @@ runtime nodejs18.x
 enhance/arc-plugin-enhance
 
 @static
-fingerprint true
+fingerprint false
