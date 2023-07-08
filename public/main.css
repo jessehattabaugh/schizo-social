@@ -16,7 +16,7 @@
 	margin: 0;
 	padding: 0;
 }
-html{
+html {
 	background-color: var(--background-color);
 	box-sizing: border-box;
 	color: var(--color);
@@ -37,7 +37,6 @@ a:link,
 a:visited {
 	color: var(--theme);
 	text-decoration: none;
-
 }
 a:hover {
 	text-decoration: underline;
@@ -57,4 +56,10 @@ p {
 	font-size: larger;
 }
 
-
+dialog {
+	margin: auto;
+}
+dialog::backdrop {
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(1em);
+}

@@ -48,7 +48,7 @@ export default function ({ html, state }) {
 					max-height: 30em;
 					overflow: hidden;
 				}
-				.attachments picture:nth-child(2n + 1):last-child {
+				.attachments picture:nth-of-type(2n + 1):last-of-type {
 					grid-column: 1 / -1;
 				}
 				.attachments img {
@@ -123,18 +123,40 @@ export default function ({ html, state }) {
 							(
 								/** @type {{ type: any; url: any; description: any; preview_url: any; }} */ attachment,
 							) => {
-								const { type, url, description, preview_url } = attachment;
+								const {
+									type,
+									url: fullsize_url,
+									description,
+									preview_url,
+								} = attachment;
 								return (
 									type == 'image' &&
-									`<picture>
-									<source
-										media="(min-width: 600px)"
-										srcset="${url}" />
-									<img
-										alt="${description || 'no description'}"
-										loading="lazy"
-										src="${preview_url}"
-								/></picture>`
+									html` <picture
+											onclick="event.currentTarget.nextElementSibling.showModal();"
+										>
+											<source
+												media="(min-width: 600px)"
+												srcset="${fullsize_url}"
+											/>
+											<img
+												alt="${description || 'no description'}"
+												loading="lazy"
+												src="${preview_url}"
+											/>
+										</picture>
+										<dialog onclick="if (event.target === this) this.close();">
+											<picture>
+												<source
+													media="(min-width: 600px)"
+													srcset="${fullsize_url}"
+												/>
+												<img
+													alt="${description || 'no description'}"
+													loading="lazy"
+													src="${preview_url}"
+												/>
+											</picture>
+										</dialog>`
 								);
 							},
 						)
