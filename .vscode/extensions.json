@@ -1,0 +1,12 @@
+{
+	"recommendations": [
+		"amatiasq.sort-imports",
+		"architect.architect",
+		"dbaeumer.vscode-eslint",
+		"editorconfig.editorconfig",
+		"esbenp.prettier-vscode",
+		"mikestead.dotenv",
+		"stevencl.adddoccomments",
+		"tobermory.es6-string-html"
+	]
+}

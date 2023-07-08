@@ -1,7 +1,7 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { store } = state;
-	console.debug('📝 ss-auth store', store);
+	// console.debug('📝 ss-auth store', store);
 
 	const { error, access_token, vapid_key, name, website } = store;
 

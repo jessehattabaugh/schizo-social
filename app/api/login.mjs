@@ -51,7 +51,7 @@ export async function post(req) {
 		/** @type {AppsResponse} */
 		const data = await response.json();
 		if (response.ok) {
-			console.debug('💎 api/login post() fetch success:', data);
+			// console.debug('💎 api/login post() fetch success:', data);
 			({ client_id, client_secret, id, vapid_key } = data);
 		} else {
 			console.error('🍅 api/login post() fetch failure:', data);
@@ -63,10 +63,10 @@ export async function post(req) {
 		params.set('response_type', 'code');
 		params.set('scope', scopes);
 		const location = `https://${host}/oauth/authorize?${params.toString()}`;
-		console.debug('📩 api/login post() location:', location);
+		// console.debug('📩 api/login post() location:', location);
 
 		const session = { client_id, client_secret, host, id, vapid_key };
-		console.debug('💸 api/login post() session:', session);
+		// console.debug('💸 api/login post() session:', session);
 
 		return { location, session };
 	} catch (error) {

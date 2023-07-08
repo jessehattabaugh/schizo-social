@@ -1,9 +1,9 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { access_token, error, statuses = {} } = state.store;
+	const { error, statuses = {} } = state.store;
 	const statusIds = Object.keys(statuses);
 	const [lastId] = statusIds.slice(-1);
-	console.debug('⌛', { access_token, error, statusIds, lastId });
+	// console.debug('⌛', { error, statusIds, lastId });
 
 	return html`<style>
 			.h-feed {
