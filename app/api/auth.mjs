@@ -24,13 +24,8 @@ export async function get(req) {
 			body.set('scope', scopes);
 			// console.debug('🍑', { body });
 			const response = await fetch(`https://${host}/oauth/token`, { method: `POST`, body });
-			/**
-			 * @typedef {Object} TokenResponse
-			 * @property {string} [access_token]
-			 * @property {string} [error]
-			 * @property {string} [error_description]
-			 */
-			/** @type {TokenResponse} */
+
+			/** @type {import('../types').TokenResponse} */
 			const data = await response.json();
 			if (response.ok) {
 				({ access_token } = data);
@@ -65,13 +60,7 @@ export async function get(req) {
 					Authorization: `Bearer ${access_token}`,
 				},
 			});
-			/**
-			 * @typedef {Object} VerifyResponse
-			 * @property {string} [name]
-			 * @property {string} [website]
-			 * @property {string} [vapid_key]
-			 */
-			/** @type {VerifyResponse} */
+			/** @type {import('../types').VerifyResponse} */
 			const data = await response.json();
 			({ vapid_key } = data);
 		} catch (error) {
