@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
-import { name, scopes } from '../constants.mjs';
-const redirect_uri = `https://${name}/auth`;
+import { redirect_uri, scope } from '../constants.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(req) {
@@ -13,24 +12,19 @@ export async function get(req) {
 	if (code && host && client_id && client_secret) {
 		// get a token
 		// https://docs.joinmastodon.org/methods/oauth/#token
-
 		try {
-			const body = new URLSearchParams();
-			body.set('client_id', client_id);
-			body.set('client_secret', client_secret);
-			body.set('code', code);
-			body.set('grant_type', 'authorization_code');
-			body.set('redirect_uri', redirect_uri);
-			body.set('scope', scopes);
+			const body = new URLSearchParams({
+				client_id,
+				client_secret,
+				code,
+				grant_type: 'authorization_code',
+				redirect_uri,
+				scope,
+			});
 			// console.debug('🍑', { body });
 			const response = await fetch(`https://${host}/oauth/token`, { method: `POST`, body });
-			/**
-			 * @typedef {Object} TokenResponse
-			 * @property {string} [access_token]
-			 * @property {string} [error]
-			 * @property {string} [error_description]
-			 */
-			/** @type {TokenResponse} */
+
+			/** @type {import('../types').TokenResponse} */
 			const data = await response.json();
 			if (response.ok) {
 				({ access_token } = data);
@@ -65,13 +59,7 @@ export async function get(req) {
 					Authorization: `Bearer ${access_token}`,
 				},
 			});
-			/**
-			 * @typedef {Object} VerifyResponse
-			 * @property {string} [name]
-			 * @property {string} [website]
-			 * @property {string} [vapid_key]
-			 */
-			/** @type {VerifyResponse} */
+			/** @type {import('../types').VerifyResponse} */
 			const data = await response.json();
 			({ vapid_key } = data);
 		} catch (error) {

@@ -11,3 +11,13 @@ enhance/arc-plugin-enhance
 
 @static
 fingerprint false
+
+@tables
+apps
+	client_id String
+	client_secret String
+	encrypt true
+	host *String
+	id String
+	PointInTimeRecovery true
+	vapid_key String
