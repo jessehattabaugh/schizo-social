@@ -1,10 +1,10 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { status_id } = state.attrs;
-	const { statuses } = state.store;
-	// const statusIds = Object.keys(statuses);
-	const status = statuses[status_id];
-	console.debug('🛻 ss-status', status);
+	const { attrs, store } = state;
+	const { status_id } = attrs;
+	const { statuses } = store;
+	const status = store?.status || statuses[status_id];
+	// console.debug('🛻 ss-status', status);
 	const {
 		content,
 		created_at,
