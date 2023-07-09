@@ -12,7 +12,6 @@ export async function get(req) {
 	if (code && host && client_id && client_secret) {
 		// get a token
 		// https://docs.joinmastodon.org/methods/oauth/#token
-
 		try {
 			const body = new URLSearchParams({
 				client_id,
@@ -22,6 +21,7 @@ export async function get(req) {
 				redirect_uri,
 				scope,
 			});
+			// console.debug('🍑', { body });
 			const response = await fetch(`https://${host}/oauth/token`, { method: `POST`, body });
 
 			/** @type {import('../types').TokenResponse} */

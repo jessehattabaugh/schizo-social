@@ -1,4 +1,4 @@
-import { name } from './constants.mjs';
+import { client_name } from './constants.mjs';
 
 /** @type {import('@enhance/types').EnhanceHeadFn} */
 export default function Head(state) {
@@ -11,7 +11,7 @@ export default function Head(state) {
 				<meta charset="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-				<title>${name}${path}</title>
+				<title>${client_name}${path}</title>
 				<meta name="description" content="mastodon client with a focus on performance" />
 				<meta name="theme-color" content="#000000" />
 

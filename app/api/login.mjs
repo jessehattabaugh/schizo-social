@@ -1,23 +1,23 @@
+import arc from '@architect/functions';
 import fetch from 'node-fetch';
+
 import { client_name, redirect_uri, scope, website } from '../constants.mjs';
+const db = await arc.tables();
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(req) {
-	const { session } = req;
-	console.debug('📤 api/login get() session', session);
-
 	// get error and host from prior posts
 	const { error, host, access_token } = req.session;
 
 	if (access_token) {
+		// user is already logged in
 		return {
 			location: '/home',
 		};
 	} else {
 		return {
 			json: { error, host },
-			// reset the session
-			session: {},
+			session: {}, // reset the session
 		};
 	}
 }
@@ -25,23 +25,33 @@ export async function get(req) {
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function post(req) {
 	const { host } = req.body;
-
-	// https://docs.joinmastodon.org/client/token/
-
-	// todo: load an already existing app for this host from a database or the session or something
-
-	// create a new app on this host
-	const website = `https://${name}`;
-	const redirect_uri = `${website}/auth`;
-	let client_id, client_secret, id, vapid_key;
 	try {
+		// first try to load an existing app from the db
+		let app = await db.apps.get({ host });
+		// console.debug('🐸', { app });
+		// TODO: test the app to make sure it's still valid, delete it if not
+		if (!app) {
+			// create a new app for this host
 			const body = new URLSearchParams({
 				client_name,
 				redirect_uris: redirect_uri,
 				scopes: scope,
 				website,
 			});
+			const response = await fetch(`https://${host}/api/v1/apps`, { method: 'POST', body });
 			/** @type {import('../types').AppsResponse} */
+			const data = await response.json();
+			if (response.ok) {
+				// console.debug('💎 api/login post() fetch success:', data);
+				app = { host, ...data };
+				await db.apps.put(app);
+			} else {
+				console.error('🍅 api/login post() fetch failure:', data);
+				throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+			}
+		}
+		const { client_id } = app;
+
 		const params = new URLSearchParams({
 			client_id,
 			redirect_uri,
@@ -51,7 +61,7 @@ export async function post(req) {
 		const location = `https://${host}/oauth/authorize?${params.toString()}`;
 		// console.debug('📩 api/login post() location:', location);
 
-		const session = { client_id, client_secret, host, id, vapid_key };
+		const session = { ...app, ...req.session };
 		// console.debug('💸 api/login post() session:', session);
 
 		return { location, session };
