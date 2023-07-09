@@ -11,11 +11,12 @@ export async function get(req) {
 		});
 		/** @type {import('../types').Status} */
 		const status = await response.json();
+		console.debug('🦋 status:get()', { status });
 		return {
 			json: { status },
 		};
 	} catch (error) {
-		console.error('☃️ status:get()', error);
+		console.error('🐞 status:get()', { error });
 		return {
 			json: { error: error.message },
 		};

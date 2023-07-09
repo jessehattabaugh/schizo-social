@@ -82,6 +82,9 @@ export default function ({ html, state }) {
 				.note {
 					margin-top: 1em;
 				}
+				pre {
+					display: none;
+				}
 			</style>
 			<article class="h-entry">
 				<header class="h-card">
@@ -138,6 +141,7 @@ export default function ({ html, state }) {
 						>
 					</a>
 				</h5>
+				<pre>${JSON.stringify(status)}</pre>
 			</article>`
 	);
 }
