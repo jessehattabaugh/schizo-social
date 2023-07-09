@@ -104,10 +104,7 @@ export default function ({ html, state }) {
 						<div class="note">${note}</div>
 					</details>
 				</header>
-				${spoiler_text &&
-				`<section class="spoiler_text">
-					${spoiler_text}
-				</section>`}
+				${spoiler_text && html`<section class="spoiler_text">${spoiler_text}</section>`}
 				<section class="e-content">${content}</section>
 				<section class="attachments">
 					${media_attachments
@@ -132,7 +129,7 @@ export default function ({ html, state }) {
 				<h5>
 					<a class="p-author u-url" href="${account_url}"> ^ by ${username} </a>
 					${reblogger &&
-					`<a class="p-author u-url" href="${reblogger.url}">
+					html`<a class="p-author u-url" href="${reblogger.url}">
 						&lt; reblogged by ${reblogger.username}
 					</a>`}
 					<a class="u-url" href="${status_url}" style="text-align: right;">
