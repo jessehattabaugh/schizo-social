@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { name, scopes } from '../constants.mjs';
+import { client_name, redirect_uri, scope, website } from '../constants.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(req) {
@@ -35,7 +35,19 @@ export async function post(req) {
 	const redirect_uri = `${website}/auth`;
 	let client_id, client_secret, id, vapid_key;
 	try {
+			const body = new URLSearchParams({
+				client_name,
+				redirect_uris: redirect_uri,
+				scopes: scope,
+				website,
+			});
 			/** @type {import('../types').AppsResponse} */
+		const params = new URLSearchParams({
+			client_id,
+			redirect_uri,
+			response_type: 'code',
+			scope,
+		});
 		const location = `https://${host}/oauth/authorize?${params.toString()}`;
 		// console.debug('📩 api/login post() location:', location);
 
