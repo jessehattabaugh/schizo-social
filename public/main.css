@@ -50,16 +50,7 @@ h6 {
 	color: var(--theme);
 	font-family: var(--font-family-heading);
 }
-
 p {
 	margin-bottom: 1em;
 	font-size: larger;
-}
-
-dialog {
-	margin: auto;
-}
-dialog::backdrop {
-	background: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(1em);
 }

@@ -1,3 +1,9 @@
+export declare interface Attachment {
+	type: string;
+	url: string;
+	description: string;
+	preview_url: string;
+}
 export declare interface AppsResponse {
 	client_id?: string;
 	client_secret?: string;

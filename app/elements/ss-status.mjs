@@ -39,25 +39,14 @@ export default function ({ html, state }) {
 					min-width: 3em;
 					vertical-align: middle;
 				}
+				section {
+					clear: both;
+					padding: 0.5em;
+				}
 				.attachments {
 					display: grid;
 					grid-gap: 0.5em;
 					grid-template-columns: repeat(auto-fit, minmax(calc(50% - 0.5em), 1fr));
-				}
-				.attachments picture {
-					max-height: 30em;
-					overflow: hidden;
-				}
-				.attachments picture:nth-of-type(2n + 1):last-of-type {
-					grid-column: 1 / -1;
-				}
-				.attachments img {
-					width: 100%;
-					height: auto;
-				}
-				section {
-					clear: both;
-					padding: 0.5em;
 				}
 				.spoiler_text {
 					font-family: var(--font-family-heading);
@@ -119,47 +108,22 @@ export default function ({ html, state }) {
 				<section class="e-content">${content}</section>
 				<section class="attachments">
 					${media_attachments
-						.map(
-							(
-								/** @type {{ type: any; url: any; description: any; preview_url: any; }} */ attachment,
-							) => {
-								const {
-									type,
-									url: fullsize_url,
-									description,
-									preview_url,
-								} = attachment;
-								return (
-									type == 'image' &&
-									html` <picture
-											onclick="event.currentTarget.nextElementSibling.showModal();"
-										>
-											<source
-												media="(min-width: 600px)"
-												srcset="${fullsize_url}"
-											/>
-											<img
-												alt="${description || 'no description'}"
-												loading="lazy"
-												src="${preview_url}"
-											/>
-										</picture>
-										<dialog onclick="if (event.target === this) this.close();">
-											<picture>
-												<source
-													media="(min-width: 600px)"
-													srcset="${fullsize_url}"
-												/>
-												<img
-													alt="${description || 'no description'}"
-													loading="lazy"
-													src="${preview_url}"
-												/>
-											</picture>
-										</dialog>`
-								);
-							},
-						)
+						.map((/** @type {import('../types').Attachment} */ attachment) => {
+							const {
+								type,
+								url: fullsize_url,
+								description,
+								preview_url,
+							} = attachment;
+							return (
+								type == 'image' &&
+								html`<ss-image
+									description=${description}
+									fullsize_url=${fullsize_url}
+									preview_url=${preview_url}
+								></ss-image>`
+							);
+						})
 						.join('\n')}
 				</section>
 				<h5>
