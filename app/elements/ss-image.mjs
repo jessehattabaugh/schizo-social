@@ -21,7 +21,7 @@ export default function ({ html, state }) {
 				backdrop-filter: blur(1em);
 			}
 		</style>
-		><picture onclick="event.currentTarget.nextElementSibling.showModal();">
+		<picture onclick="event.currentTarget.nextElementSibling.showModal();">
 			<source media="(min-width: 600px)" srcset="${fullsize_url}" />
 			<img alt="${description || 'no description'}" loading="lazy" src="${preview_url}" />
 		</picture>

@@ -1,10 +1,12 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { attrs, store } = state;
-	const { status_id } = attrs;
-	const { statuses } = store;
-	const status = store?.status || statuses[status_id];
+	const { statuses, status: details } = store;
+	const id = attrs?.id || details?.id;
+	const status = details || statuses[id];
 	// console.debug('🛻 ss-status', status);
+
+	// if status is a reblog, use the reblogged status
 	const {
 		content,
 		created_at,
@@ -21,15 +23,31 @@ export default function ({ html, state }) {
 		username,
 	} = status.reblog?.account || status.account;
 	const reblogger = status.reblog && status.account;
+
 	return (
 		status &&
 		html`<style>
 				.h-entry {
-					border: 1px inset grey;
 					border-radius: 0.25em;
-					margin: 1em 0;
+					border: 1px inset grey;
+					margin: 1em auto;
+					max-width: 50em;
 					overflow-x: hidden;
-					width: 100%;
+					block-size: max-content;
+				}
+				@keyframes scale {
+					from {
+						transform: scale(1);
+					}
+					to {
+						transform: scale(0);
+					}
+				}
+				.h-entry::view-transition-new(*) {
+					animation: scale 10s ease-in forwards;
+				}
+				.h-entry::view-transition-old(*) {
+					animation: scale 10s ease-out reverse;
 				}
 				.h-card {
 					border-bottom: 1px outset grey;
@@ -86,7 +104,7 @@ export default function ({ html, state }) {
 					display: none;
 				}
 			</style>
-			<article class="h-entry">
+			<article class="h-entry" style="view-transition-name: status-${id}">
 				<header class="h-card">
 					<details style="background-image: url('${header}')">
 						<summary>
@@ -127,16 +145,20 @@ export default function ({ html, state }) {
 						.join('\n')}
 				</section>
 				<h5>
-					<a class="p-author u-url" href="${account_url}"> ^ by ${username} </a>
-					${reblogger &&
-					html`<a class="p-author u-url" href="${reblogger.url}">
-						&lt; reblogged by ${reblogger.username}
-					</a>`}
-					<a class="u-url" href="${status_url}" style="text-align: right;">
-						<time class="dt-published" datetime="${created_at}">
-							at ${new Date(created_at).toLocaleString()}</time
-						>
-					</a>
+					${details
+						? html`<a class="p-author u-url" href="${account_url}">
+									^ by ${username}
+								</a>
+								${reblogger &&
+								html`<a class="p-author u-url" href="${reblogger.url}">
+									&lt; reblogged by ${reblogger.username}
+								</a>`}
+								<a class="u-url" href="${status_url}" style="text-align: right;">
+									<time class="dt-published" datetime="${created_at}">
+										at ${new Date(created_at).toLocaleString()}</time
+									>
+								</a>`
+						: html`<a href="/status?id=${id}">details</a>`}
 				</h5>
 				<pre>${JSON.stringify(status)}</pre>
 			</article>`

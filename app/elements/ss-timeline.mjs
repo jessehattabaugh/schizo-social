@@ -46,7 +46,7 @@ export default function ({ html, state }) {
 		<ol class="h-feed">
 			${statusIds
 				.map((statusId) => {
-					return html`<li><ss-status status_id="${statusId}"></ss-status></li>`;
+					return html`<li><ss-status id="${statusId}"></ss-status></li>`;
 				})
 				.join('\n')}
 		</ol>

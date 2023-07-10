@@ -2,10 +2,10 @@
 export async function get(req) {
 	try {
 		const { session, query } = req;
-		const { status_id } = query;
+		const { id } = query;
 		const { access_token, host } = session;
 		// https://docs.joinmastodon.org/methods/statuses/#get
-		const response = await fetch(`https://${host}/api/v1/statuses/${status_id}`, {
+		const response = await fetch(`https://${host}/api/v1/statuses/${id}`, {
 			headers: { Authorization: `Bearer ${access_token}` },
 			method: `GET`,
 		});
