@@ -66,6 +66,9 @@ export default function ({ html, state }) {
 					grid-gap: 0.5em;
 					grid-template-columns: repeat(auto-fit, minmax(calc(50% - 0.5em), 1fr));
 				}
+				.attachments > :nth-of-type(2n + 1):last-of-type {
+					grid-column: 1 / -1;
+				}
 				.spoiler_text {
 					font-family: var(--font-family-heading);
 				}

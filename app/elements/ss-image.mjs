@@ -6,9 +6,6 @@ export default function ({ html, state }) {
 				max-height: 30em;
 				overflow: hidden;
 			}
-			picture:nth-of-type(2n + 1):last-of-type {
-				grid-column: 1 / -1;
-			}
 			img {
 				width: 100%;
 				height: auto;
