@@ -20,6 +20,6 @@ export default function ({ html, state }) {
 				<dd>${website}</dd>
 			</dl>
 		</details>
-		${error && `<div class="error">${error}</div>`}
-		${access_token && !error && `<nav><a href='/home'>Go to your Home Timeline</a></nav>`}`;
+		${error && html`<div class="error">${error}</div>`}
+		${access_token && !error && html`<nav><a href="/home">Go to your Home Timeline</a></nav>`}`;
 }

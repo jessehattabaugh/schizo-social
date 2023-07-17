@@ -15,8 +15,8 @@ export default function ({ html, state }) {
 		</style>
 		<nav>
 			${access_token
-				? `<a href="/home" class="${active == 'home' && 'active'}">home</a>
+				? html`<a href="/home" class="${active == 'home' && 'active'}">home</a>
 						<a href="/public" class="${active == 'public' && 'active'}">public</a>`
-				: `<a href="/login">login</a>`}
+				: html`<a href="/login">login</a>`}
 		</nav>`;
 }

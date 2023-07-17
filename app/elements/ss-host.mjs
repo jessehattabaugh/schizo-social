@@ -40,5 +40,5 @@ export default function ({ html, state }) {
 				value="${host}"
 			/>
 		</div>
-		${error && `<div class="error">${error}</div>`}`;
+		${error && html`<div class="error">${error}</div>`}`;
 }

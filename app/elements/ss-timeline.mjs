@@ -46,10 +46,10 @@ export default function ({ html, state }) {
 		<ol class="h-feed">
 			${statusIds
 				.map((statusId) => {
-					return `<li><ss-status status_id="${statusId}"></ss-status></li>`;
+					return html`<li><ss-status id="${statusId}"></ss-status></li>`;
 				})
 				.join('\n')}
 		</ol>
 		<a id="nextLink" href="?from=${lastId}">Next</a>
-		${error && `<div class="error">${error}</div>`}`;
+		${error && html`<div class="error">${error}</div>`}`;
 }

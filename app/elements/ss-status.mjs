@@ -1,10 +1,12 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { status_id } = state.attrs;
-	const { statuses } = state.store;
-	// const statusIds = Object.keys(statuses);
-	const status = statuses[status_id];
-	console.debug('🛻 ss-status', status);
+	const { attrs, store } = state;
+	const { statuses, status: details } = store;
+	const id = attrs?.id || details?.id;
+	const status = details || statuses[id];
+	// console.debug('🛻 ss-status', status);
+
+	// if status is a reblog, use the reblogged status
 	const {
 		content,
 		created_at,
@@ -21,15 +23,31 @@ export default function ({ html, state }) {
 		username,
 	} = status.reblog?.account || status.account;
 	const reblogger = status.reblog && status.account;
+
 	return (
 		status &&
 		html`<style>
 				.h-entry {
-					border: 1px inset grey;
 					border-radius: 0.25em;
-					margin: 1em 0;
+					border: 1px inset grey;
+					margin: 1em auto;
+					max-width: 50em;
 					overflow-x: hidden;
-					width: 100%;
+					block-size: max-content;
+				}
+				@keyframes scale {
+					from {
+						transform: scale(1);
+					}
+					to {
+						transform: scale(0);
+					}
+				}
+				.h-entry::view-transition-new(*) {
+					animation: scale 10s ease-in forwards;
+				}
+				.h-entry::view-transition-old(*) {
+					animation: scale 10s ease-out reverse;
 				}
 				.h-card {
 					border-bottom: 1px outset grey;
@@ -39,25 +57,17 @@ export default function ({ html, state }) {
 					min-width: 3em;
 					vertical-align: middle;
 				}
+				section {
+					clear: both;
+					padding: 0.5em;
+				}
 				.attachments {
 					display: grid;
 					grid-gap: 0.5em;
 					grid-template-columns: repeat(auto-fit, minmax(calc(50% - 0.5em), 1fr));
 				}
-				.attachments picture {
-					max-height: 30em;
-					overflow: hidden;
-				}
-				.attachments picture:nth-of-type(2n + 1):last-of-type {
+				.attachments > :nth-of-type(2n + 1):last-of-type {
 					grid-column: 1 / -1;
-				}
-				.attachments img {
-					width: 100%;
-					height: auto;
-				}
-				section {
-					clear: both;
-					padding: 0.5em;
 				}
 				.spoiler_text {
 					font-family: var(--font-family-heading);
@@ -93,8 +103,11 @@ export default function ({ html, state }) {
 				.note {
 					margin-top: 1em;
 				}
+				pre {
+					display: none;
+				}
 			</style>
-			<article class="h-entry">
+			<article class="h-entry" style="view-transition-name: status-${id}">
 				<header class="h-card">
 					<details style="background-image: url('${header}')">
 						<summary>
@@ -112,68 +125,45 @@ export default function ({ html, state }) {
 						<div class="note">${note}</div>
 					</details>
 				</header>
-				${spoiler_text &&
-				`<section class="spoiler_text">
-					${spoiler_text}
-				</section>`}
+				${spoiler_text && html`<section class="spoiler_text">${spoiler_text}</section>`}
 				<section class="e-content">${content}</section>
 				<section class="attachments">
 					${media_attachments
-						.map(
-							(
-								/** @type {{ type: any; url: any; description: any; preview_url: any; }} */ attachment,
-							) => {
-								const {
-									type,
-									url: fullsize_url,
-									description,
-									preview_url,
-								} = attachment;
-								return (
-									type == 'image' &&
-									html` <picture
-											onclick="event.currentTarget.nextElementSibling.showModal();"
-										>
-											<source
-												media="(min-width: 600px)"
-												srcset="${fullsize_url}"
-											/>
-											<img
-												alt="${description || 'no description'}"
-												loading="lazy"
-												src="${preview_url}"
-											/>
-										</picture>
-										<dialog onclick="if (event.target === this) this.close();">
-											<picture>
-												<source
-													media="(min-width: 600px)"
-													srcset="${fullsize_url}"
-												/>
-												<img
-													alt="${description || 'no description'}"
-													loading="lazy"
-													src="${preview_url}"
-												/>
-											</picture>
-										</dialog>`
-								);
-							},
-						)
+						.map((/** @type {import('../types').Attachment} */ attachment) => {
+							const {
+								type,
+								url: fullsize_url,
+								description,
+								preview_url,
+							} = attachment;
+							return (
+								type == 'image' &&
+								html`<ss-image
+									description=${description}
+									fullsize_url=${fullsize_url}
+									preview_url=${preview_url}
+								></ss-image>`
+							);
+						})
 						.join('\n')}
 				</section>
 				<h5>
-					<a class="p-author u-url" href="${account_url}"> ^ by ${username} </a>
-					${reblogger &&
-					`<a class="p-author u-url" href="${reblogger.url}">
-						&lt; reblogged by ${reblogger.username}
-					</a>`}
-					<a class="u-url" href="${status_url}" style="text-align: right;">
-						<time class="dt-published" datetime="${created_at}">
-							at ${new Date(created_at).toLocaleString()}</time
-						>
-					</a>
+					${details
+						? html`<a class="p-author u-url" href="${account_url}">
+									^ by ${username}
+								</a>
+								${reblogger &&
+								html`<a class="p-author u-url" href="${reblogger.url}">
+									&lt; reblogged by ${reblogger.username}
+								</a>`}
+								<a class="u-url" href="${status_url}" style="text-align: right;">
+									<time class="dt-published" datetime="${created_at}">
+										at ${new Date(created_at).toLocaleString()}</time
+									>
+								</a>`
+						: html`<a href="/status?id=${id}">details</a>`}
 				</h5>
+				<pre>${JSON.stringify(status)}</pre>
 			</article>`
 	);
 }
