@@ -1,5 +1,11 @@
 # Change Log
 
+## July 17th 2023
+
+I implemented a detail page for statuses, and used the multi-page ViewTransition API to transition to it. The CSS is still janky so the transitions aren't smooth, so I'll need to figure out what's going on there. I also implemented a fullscreen view of attachment images, these use single page View Transitions and are similarly janky. Oh and I fixed reblogs.
+
+None of that was important though, just busy work. I need to get back to implementing multi-account.
+
 ## May 18th 2023
 
 I kinda lost interest in this project. I tried to implement @enhance/element but it didn't feel right. It seemed like maybe the server wasn't the right place to do all this.

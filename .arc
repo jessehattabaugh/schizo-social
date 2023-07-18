@@ -10,7 +10,8 @@ runtime nodejs18.x
 enhance/arc-plugin-enhance
 
 @static
-fingerprint false
+compression true
+fingerprint true
 
 @tables
 apps

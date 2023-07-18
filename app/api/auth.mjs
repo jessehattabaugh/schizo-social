@@ -4,15 +4,14 @@ import { redirect_uri, scope } from '../constants.mjs';
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(req) {
 	const { session } = req;
-	const { host, client_id, client_secret } = session;
-	let { access_token } = session;
 	const { code } = req.query;
-	// console.debug('🔑 GET /auth', { code, host, client_id, client_secret });
+	const { client_id, client_secret, host } = session;
 
-	if (code && host && client_id && client_secret) {
-		// get a token
-		// https://docs.joinmastodon.org/methods/oauth/#token
-		try {
+	console.debug('🥒 GET /auth', { client_id, client_secret, code, host });
+	try {
+		if (client_id && client_secret && code && host) {
+			// get a token
+			// https://docs.joinmastodon.org/methods/oauth/#token
 			const body = new URLSearchParams({
 				client_id,
 				client_secret,
@@ -21,63 +20,45 @@ export async function get(req) {
 				redirect_uri,
 				scope,
 			});
-			// console.debug('🍑', { body });
 			const response = await fetch(`https://${host}/oauth/token`, { method: `POST`, body });
-
 			/** @type {import('../types').TokenResponse} */
 			const data = await response.json();
-			if (response.ok) {
-				({ access_token } = data);
+			console.debug('🍑 token response', { body, data });
+			const { access_token } = data;
+			if (access_token) {
+				// confirm that the access_token works.
+				// https://docs.joinmastodon.org/methods/apps/#verify_credentials
+				const response = await fetch(`https://${host}/api/v1/apps/verify_credentials`, {
+					headers: { Authorization: `Bearer ${access_token}` },
+				});
+				/** @type {import('../types').VerifyResponse} */
+				const data = await response.json();
+				console.debug('🍇 verify response', { data });
+				const { vapid_key } = data;
+				if (vapid_key) {
+					return {
+						// json: { access_token, code, vapid_key },
+						location: '/home',
+						session: { access_token, ...session },
+					};
+				} else {
+					const { status, statusText } = response;
+					const { error } = data;
+					console.error('🍒 verify failure', { error, status, statusText });
+					throw new Error('access token unverified');
+				}
 			} else {
 				const { status, statusText } = response;
 				const { error, error_description } = data;
-				console.error('🍉', {
-					client_id,
-					client_secret,
-					code,
-					error,
-					error_description,
-					status,
-					statusText,
-				});
+				console.error('🍉 token failure', { error, error_description, status, statusText });
 				throw new Error('could not get token');
 			}
-		} catch (error) {
-			console.error('🍓', error);
 		}
-		// console.debug('🍏', { access_token });
-	}
-
-	if (access_token) {
-		// Confirm that the app’s OAuth2 credentials work.
-		// https://docs.joinmastodon.org/methods/apps/#verify_credentials
-
-		var vapid_key;
-		try {
-			const response = await fetch(`https://${host}/api/v1/apps/verify_credentials`, {
-				headers: {
-					Authorization: `Bearer ${access_token}`,
-				},
-			});
-			/** @type {import('../types').VerifyResponse} */
-			const data = await response.json();
-			({ vapid_key } = data);
-		} catch (error) {
-			console.error('🍅', error);
-		}
-		// console.debug('🍇', { vapid_key });
-	}
-
-	if (access_token && vapid_key) {
-		return {
-			// json: { access_token, code, vapid_key },
-			location: '/home',
-			session: { access_token, ...session },
-		};
-	} else {
+	} catch (error) {
+		console.error('🍅', { error });
 		return {
 			location: '/login',
-			session: { error: 'access token unverified', ...session },
+			session: { error: 'authentication failed', ...session },
 		};
 	}
 }

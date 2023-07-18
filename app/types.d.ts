@@ -32,7 +32,8 @@ export declare interface TokenResponse {
 	error_description?: string;
 }
 export declare interface VerifyResponse {
+	error?: string;
 	name?: string;
-	website?: string;
 	vapid_key?: string;
+	website?: string;
 }
