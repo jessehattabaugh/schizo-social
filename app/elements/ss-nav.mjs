@@ -4,19 +4,19 @@ export default function ({ html, state }) {
 	const { active } = state.attrs;
 	return html` <style>
 			nav {
-				text-align: right;
+				text-align: left;
 			}
-			a {
-				border: outset 1px grey;
-				display: inline-block;
-				font-size: larger;
-				padding: 1em;
+			.active {
+				background-color: var(--theme);
+				color: white;
 			}
 		</style>
 		<nav>
 			${access_token
-				? html`<a href="/home" class="${active == 'home' && 'active'}">home</a>
-						<a href="/public" class="${active == 'public' && 'active'}">public</a>`
+				? html`<a href="/home" class="button ${active == 'home' && 'active'}">home</a>
+						<a href="/public" class="button ${active == 'public' && 'active'}"
+							>public</a
+						>`
 				: html`<a href="/login">login</a>`}
 		</nav>`;
 }

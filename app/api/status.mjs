@@ -13,7 +13,7 @@ export async function get(req) {
 		const status = await response.json();
 		console.debug('🦋 status:get()', { status });
 		return {
-			json: { status },
+			json: { access_token, status },
 		};
 	} catch (error) {
 		console.error('🐞 status:get()', { error });

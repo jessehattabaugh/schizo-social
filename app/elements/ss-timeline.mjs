@@ -4,7 +4,6 @@ export default function ({ html, state }) {
 	const statusIds = Object.keys(statuses);
 	const [lastId] = statusIds.slice(-1);
 	// console.debug('⌛', { error, statusIds, lastId });
-
 	return html`<style>
 			.h-feed {
 				column-count: 1;
@@ -35,12 +34,8 @@ export default function ({ html, state }) {
 					column-count: 6;
 				}
 			}
-			li {
-				list-style: none;
-			}
-			#nextLink {
-				font-size: larger;
-				padding: 0.5em;
+			nav {
+				text-align: right;
 			}
 		</style>
 		<ol class="h-feed">
@@ -50,6 +45,8 @@ export default function ({ html, state }) {
 				})
 				.join('\n')}
 		</ol>
-		<a id="nextLink" href="?from=${lastId}">Next</a>
+		<nav>
+			<a class="button" href="?from=${lastId}">Next</a>
+		</nav
 		${error && html`<div class="error">${error}</div>`}`;
 }

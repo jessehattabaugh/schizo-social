@@ -54,3 +54,12 @@ p {
 	margin-bottom: 1em;
 	font-size: larger;
 }
+li {
+	list-style: none;
+}
+.button {
+	border: outset 1px var(--theme);
+	display: inline-block;
+	font-size: larger;
+	padding: 1em;
+}
