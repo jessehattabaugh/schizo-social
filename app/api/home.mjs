@@ -2,41 +2,35 @@ import { timeline } from '../mastodon.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(req) {
-	const { session } = req;
-	const { access_token, host } = session;
-	const { from } = req.query;
-	// console.debug('🏠', { access_token, host, from });
+	try {
+		const { session } = req;
+		// todo: get a list of access_tokens
+		const { access_token, host } = session;
+		const { from } = req.query;
+		// console.debug('🏠', { access_token, host, from });
 
-	if (access_token) {
-		const response = await timeline(access_token, 'home', host, from);
-		if (response.ok) {
-			const data = await response.json();
-
-			// @ts-ignore
-			const statuses = data.reduce(
-				(
-					/** @type {{ [x: string]: any; }} */ _,
-					/** @type {{ id: string | number; }} */ status,
-				) => {
-					_[status.id] = status;
-					return _;
-				},
-				{},
-			);
+		// todo: if there are any access_tokens, fetch from all of them
+		if (access_token) {
+			const data = await timeline(access_token, 'home', host, from);
+			/** @type {{ [x: string]: import('../types').Status; }} */
+			const _ = {};
+			const statuses = data.reduce((_, status) => {
+				_[status.id] = status;
+				return _;
+			}, _);
 			// console.debug('🌞', statuses);
 			return {
 				json: { access_token, statuses },
 			};
 		} else {
-			const { status, statusText } = response;
-			console.error('☃️', { status, statusText });
 			return {
-				json: { error: `${status}: ${statusText}` },
+				location: '/login',
 			};
 		}
-	} else {
+	} catch (error) {
+		console.error('☃️', { error });
 		return {
-			location: '/login',
+			json: { error: error.message },
 		};
 	}
 }

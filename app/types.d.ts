@@ -1,16 +1,17 @@
-export declare interface Attachment {
+export interface Attachment {
 	type: string;
 	url: string;
 	description: string;
 	preview_url: string;
 }
-export declare interface AppsResponse {
+// https://docs.joinmastodon.org/methods/apps/#create
+export interface AppsResponse {
 	client_id?: string;
 	client_secret?: string;
 	id?: string;
 	vapid_key?: string;
 }
-export declare interface Status {
+export interface Status {
 	created_at: string;
 	id: string;
 	uri: string;
@@ -26,14 +27,18 @@ export declare interface Status {
 	emojis: Emoji[];
 	reblog?: Status;
 }
-export declare interface TokenResponse {
+// https://docs.joinmastodon.org/methods/oauth/#token
+export interface TokenResponse {
 	access_token?: string;
 	error?: string;
 	error_description?: string;
 }
-export declare interface VerifyResponse {
+// https://docs.joinmastodon.org/methods/apps/#verify_credentials
+export interface VerifyResponse {
 	error?: string;
 	name?: string;
 	vapid_key?: string;
 	website?: string;
 }
+// https://docs.joinmastodon.org/methods/timelines/
+export type TimelineResponse = Status[];
