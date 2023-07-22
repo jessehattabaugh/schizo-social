@@ -1,34 +1,21 @@
-import { timeline } from '../mastodon.mjs';
+import { getStatuses } from '../mastodon.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(req) {
 	try {
 		const { session } = req;
-		const { access_token, host } = session;
+		/** @type {import('../types').Authorizations} */
+		const authorizations = session.authorizations || [];
 		const { from } = req.query;
-		// console.debug('📢', { access_token, host, from });
-
-		if (access_token) {
-			const data = await timeline(access_token, 'public', host, from);
-			/** @type {{ [x: string]: import('../types').Status; }} */
-			const _ = {};
-			const statuses = data.reduce((_, status) => {
-				_[status.id] = status;
-				return _;
-			}, _);
-			// console.debug('🌞', statuses);
-			return {
-				json: { access_token, statuses },
-			};
+		console.debug('🏠', { authorizations, from });
+		if (authorizations) {
+			const { statuses, statusIds } = await getStatuses(authorizations, 'public', from);
+			return { json: { authorizations, statuses, statusIds } };
 		} else {
-			return {
-				location: '/login',
-			};
+			return { location: '/login' };
 		}
 	} catch (error) {
 		console.error('☃️', { error });
-		return {
-			json: { error: error.message },
-		};
+		return { json: { error: error.message } };
 	}
 }

@@ -1,4 +1,4 @@
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator)
 	window.addEventListener('load', async () => {
 		try {
 			await navigator.serviceWorker.register('sw', {
@@ -9,6 +9,5 @@ if ('serviceWorker' in navigator) {
 			console.error('👨‍🏭⚠ service worker failed', exception);
 		}
 	});
-}
 
 console.debug('🦥 async scripts loaded');

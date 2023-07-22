@@ -57,9 +57,11 @@ p {
 li {
 	list-style: none;
 }
+dt::after {
+	content: ':';
+}
 .button {
 	border: outset 1px var(--theme);
 	display: inline-block;
-	font-size: larger;
-	padding: 1em;
+	padding: 0.5em;
 }

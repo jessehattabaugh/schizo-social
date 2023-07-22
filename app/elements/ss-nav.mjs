@@ -1,6 +1,6 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { access_token } = state.store;
+	const { authorizations } = state.store;
 	const { active } = state.attrs;
 	return html` <style>
 			nav {
@@ -12,7 +12,7 @@ export default function ({ html, state }) {
 			}
 		</style>
 		<nav>
-			${access_token
+			${authorizations
 				? html`<a href="/home" class="button ${active == 'home' && 'active'}">home</a>
 						<a href="/public" class="button ${active == 'public' && 'active'}"
 							>public</a

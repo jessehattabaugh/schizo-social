@@ -1,11 +1,27 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { attrs, store } = state;
-	const { statuses, status: details } = store;
-	const id = attrs?.id || details?.id;
-	const status = details || statuses[id];
-	// console.debug('🛻 ss-status', status);
 
+	/** @type {import('../types').Authorizations} */
+	const auths = store.authorizations;
+
+	/** @type {import('../types').Status} */
+	const Details = store.details;
+
+	/** @type {import('../types').StatusMap} */
+	const Statuses = store.statuses;
+
+	/** @type {string} */
+	const id = attrs?.id || Details?.id;
+
+	const status = Details || Statuses[id];
+	const [firstAuth] = status.authorizations;
+	const authIndex = auths
+		.findIndex(({ access_token }) => access_token === firstAuth.access_token)
+		.toString();
+	console.debug('🛻 ss-status', { authIndex, auths, firstAuth, id, status });
+
+	const { authorizations } = status;
 	// if status is a reblog, use the reblogged status
 	const {
 		content,
@@ -106,6 +122,26 @@ export default function ({ html, state }) {
 				pre {
 					display: none;
 				}
+				dl {
+					align-items: center;
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: space-evenly;
+					width: 100%;
+				}
+				dt,
+				dd {
+					margin: 0.5em;
+					white-space: nowrap;
+				}
+				dt {
+					flex: 0;
+					text-align: right;
+				}
+				dd {
+					flex: 1;
+					text-align: left;
+				}
 			</style>
 			<article class="h-entry" style="view-transition-name: status-${id}">
 				<header class="h-card">
@@ -129,7 +165,7 @@ export default function ({ html, state }) {
 				<section class="e-content">${content}</section>
 				<section class="attachments">
 					${media_attachments
-						.map((/** @type {import('../types').Attachment} */ attachment) => {
+						.map((attachment) => {
 							const {
 								type,
 								url: fullsize_url,
@@ -148,20 +184,45 @@ export default function ({ html, state }) {
 						.join('\n')}
 				</section>
 				<h5>
-					${details
-						? html`<a class="p-author u-url" href="${account_url}">
-									^ by ${username}
-								</a>
+					${Details
+						? html`<dl>
+								<dt>from</dt>
+								<dd>
+									${authorizations
+										.map(
+											({ host }) =>
+												html`<a href="https://${host}">${host}</a>`,
+										)
+										.join('')}
+								</dd>
+								<dt>by</dt>
+								<dd>
+									<a class="p-author u-url" href="${account_url}">${username}</a>
+								</dd>
 								${reblogger &&
-								html`<a class="p-author u-url" href="${reblogger.url}">
-									&lt; reblogged by ${reblogger.username}
-								</a>`}
-								<a class="u-url" href="${status_url}" style="text-align: right;">
-									<time class="dt-published" datetime="${created_at}">
-										at ${new Date(created_at).toLocaleString()}</time
+								html`<dt>&lt; reblogged by</dt>
+									<dd>
+										<a class="p-author u-url" href="${reblogger.url}">
+											${reblogger.username}
+										</a>
+									</dd>`}
+								<dt>at</dt>
+								<dd>
+									<a
+										class="u-url"
+										href="${status_url}"
+										style="text-align: right;"
 									>
-								</a>`
-						: html`<a href="/status?id=${id}">details</a>`}
+										<time class="dt-published" datetime="${created_at}">
+											${new Date(created_at).toLocaleString()}</time
+										>
+									</a>
+								</dd>
+						  </dl>`
+						: html`<a
+								href="/status?${new URLSearchParams({ id, authIndex }).toString()}"
+								>details &gt;</a
+						  >`}
 				</h5>
 				<pre>${JSON.stringify(status)}</pre>
 			</article>`

@@ -1,9 +1,11 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { error, statuses = {} } = state.store;
-	const statusIds = Object.keys(statuses);
-	const [lastId] = statusIds.slice(-1);
-	// console.debug('⌛', { error, statusIds, lastId });
+	const { error, statusIds = [] } = state.store;
+	/** @type {import('../types').StatusIds} */
+	const StatusIds = statusIds;
+	// get the last id
+	const lastId = StatusIds[StatusIds.length - 1];
+	// console.debug('⌛', { error, lastId });
 	return html`<style>
 			.h-feed {
 				column-count: 1;
@@ -39,11 +41,7 @@ export default function ({ html, state }) {
 			}
 		</style>
 		<ol class="h-feed">
-			${statusIds
-				.map((statusId) => {
-					return html`<li><ss-status id="${statusId}"></ss-status></li>`;
-				})
-				.join('\n')}
+			${StatusIds.map((id) => html`<li><ss-status id="${id}"></ss-status></li>`).join('\n')}
 		</ol>
 		<nav>
 			<a class="button" href="?from=${lastId}">Next</a>
