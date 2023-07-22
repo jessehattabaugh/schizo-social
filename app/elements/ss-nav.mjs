@@ -1,7 +1,6 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { authorizations } = state.store;
-	const { active } = state.attrs;
+	const { authorizations, timeline } = state.store;
 	return html` <style>
 			nav {
 				text-align: left;
@@ -13,8 +12,12 @@ export default function ({ html, state }) {
 		</style>
 		<nav>
 			${authorizations
-				? html`<a href="/home" class="button ${active == 'home' && 'active'}">home</a>
-						<a href="/public" class="button ${active == 'public' && 'active'}"
+				? html`<a href="/timelines/home" class="button ${timeline == 'home' && 'active'}"
+							>home</a
+						>
+						<a
+							href="/timelines/public"
+							class="button ${timeline == 'public' && 'active'}"
 							>public</a
 						>`
 				: html`<a href="/login">login</a>`}

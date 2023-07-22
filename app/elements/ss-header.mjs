@@ -1,6 +1,5 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
-export default function ({ html, state }) {
-	const { active } = state.attrs;
+export default function ({ html }) {
 	return html`<style>
 			header {
 				border-bottom: solid 0.5em var(--theme);
@@ -28,5 +27,5 @@ export default function ({ html, state }) {
 		<header>
 			<h1><a href="/">😾schizo.social</a></h1>
 		</header>
-		<ss-nav active=${active}></ss-nav>`;
+		<ss-nav></ss-nav>`;
 }

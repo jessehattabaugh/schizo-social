@@ -22,11 +22,13 @@ export default function ({ html, state }) {
 		<h2>Accounts</h2>
 		<ol>
 			${auths
-				? auths.map(({ host }) => html`<li><a href="${host}">${host}</a></li>`).join('')
+				? auths
+						.map(({ host }) => html`<li><a href="https://${host}">${host}</a></li>`)
+						.join('')
 				: ''}
 		</ol>
 		<nav>
 			<a class="button" href="/login">add an account</a>
-			${auths && html`<a class="button" href="/home">Go to your Home Timeline</a>`}
+			${auths && html`<a class="button" href="/timelines/home">Go to your Home Timeline</a>`}
 		</nav>`;
 }
