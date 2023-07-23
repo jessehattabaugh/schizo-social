@@ -1,4 +1,4 @@
-import { isAuthorized } from '../../middleware.mjs';
+import { redirectToLogin } from '../../middleware.mjs';
 import fetch from 'node-fetch';
 /** @todo use node-fetch-cache */
 /** @see https://www.npmjs.com/package/node-fetch-cache */
@@ -36,29 +36,28 @@ export async function fetchTimeline(access_token, host, timeline, max_id, min_id
 }
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function fetchAllTimelines(req) {
-	const { timeline } = req.params;
+export async function fetchAllTimelines(request) {
+	const { session, query, params } = request;
+	const { timeline } = params;
+	/** @type {import('../../types').Authorizations} */
+	const authorizations = session.authorizations || [];
+
+	const _nextIds = query?.nextIds?.split(',');
+	const _prevIds = query?.prevIds?.split(',');
+	console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
+
 	try {
-		const { session } = req;
-
-		/** @type {import('../../types').Authorizations} */
-		const authorizations = session.authorizations || [];
-
-		const _nextIds = req.query?.nextIds?.split(',');
-		const _prevIds = req.query?.prevIds?.split(',');
-		console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
-
 		const promises = authorizations.map(({ access_token, host }, i) => {
-			const request = fetchTimeline(
+			const promise = fetchTimeline(
 				access_token,
 				host,
 				timeline,
 				_nextIds?.[i],
 				_prevIds?.[i],
 			);
-			return { access_token, request };
+			return { access_token, promise };
 		});
-		const responses = await Promise.all(promises.map(({ request }) => request));
+		const responses = await Promise.all(promises.map(({ promise }) => promise));
 
 		/** @type {import('../../types').StatusMap} */
 		const statuses = {};
@@ -106,4 +105,4 @@ export async function fetchAllTimelines(req) {
 	}
 }
 
-export const get = [isAuthorized, fetchAllTimelines];
+export const get = [redirectToLogin, fetchAllTimelines];

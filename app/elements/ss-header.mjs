@@ -25,7 +25,7 @@ export default function ({ html }) {
 			}
 		</style>
 		<header>
-			<h1><a href="/">😾schizo.social</a></h1>
+			<h1><a href="/">😾Schizo.social</a></h1>
 		</header>
 		<ss-nav></ss-nav>`;
 }

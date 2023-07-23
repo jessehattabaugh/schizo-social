@@ -1,4 +1,4 @@
-import { isAuthorized } from '../middleware.mjs';
+import { redirectToLogin } from '../middleware.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function fetchStatus(req) {
@@ -29,4 +29,4 @@ export async function fetchStatus(req) {
 	}
 }
 
-export const get = [isAuthorized, fetchStatus];
+export const get = [redirectToLogin, fetchStatus];

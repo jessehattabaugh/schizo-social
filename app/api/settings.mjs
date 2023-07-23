@@ -2,14 +2,14 @@ import fetch from 'node-fetch';
 import { redirect_uri, scope } from '../constants.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function get(req) {
-	const { session } = req;
+export async function get(request) {
+	const { session } = request;
 	/** @type {import('../types').Authorizations} */
 	const authorizations = session.authorizations || [];
 	try {
-		const { code } = req.query;
+		const { code } = request.query;
 		const { client_id, client_secret, host, ...remainingSession } = session;
-		// console.debug('🥒 GET /auth', { client_id, client_secret, code, host });
+		// console.debug('🥒 GET /settings', { client_id, client_secret, code, host });
 		if (client_id && client_secret && code && host) {
 			/** get a token
 			 * @see https://docs.joinmastodon.org/methods/oauth/#token */
@@ -56,7 +56,6 @@ export async function get(req) {
 			}
 		}
 		return {
-			json: { authorizations },
 			session: { ...remainingSession, authorizations },
 		};
 	} catch (error) {

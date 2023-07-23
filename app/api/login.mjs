@@ -5,20 +5,21 @@ import { client_name, redirect_uri, scope, website } from '../constants.mjs';
 const db = await arc.tables();
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function get(req) {
-	// handle errors from previous login attempts
-	const { error, host } = req.session;
+export async function get(request) {
+	/** handle errors from previous login attempts */
+	const { error, host } = request.session;
 	return { json: { error, host } };
 }
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function post(req) {
-	const { host } = req.body;
+export async function post(request) {
+	const { session, body } = request;
+	const { host } = body;
 	try {
-		// first try to load an existing app from the db
+		/** first try to load an existing app from the db */
 		let app = await db.apps.get({ host });
 		// console.debug('🐸', { app, host });
-		// TODO: test the app to make sure it's still valid, delete it if not
+		/** @todo test the app to make sure it's still valid, delete it if not */
 		if (!app) {
 			// create a new app for this host
 			const body = new URLSearchParams({
@@ -47,9 +48,8 @@ export async function post(req) {
 			scope,
 		});
 		const location = `https://${host}/oauth/authorize?${params.toString()}`;
-		const session = { ...req.session, ...app };
 		// console.debug('💸 api/login post() session:', { location, session });
-		return { location, session };
+		return { location, session: { ...session, ...app } };
 	} catch (error) {
 		console.error('⛔api/login post() returning error', error);
 		return { json: { error, host, website, redirect_uri } };

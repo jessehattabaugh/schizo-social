@@ -3,14 +3,8 @@ export default function ({ html, state }) {
 	const { store } = state;
 	/** @type {import('../types').Authorizations} */
 	const auths = store.authorizations;
-	console.debug('🧼', { auths });
+	// console.debug('🧼', { auths });
 	return html`<style>
-			:host {
-				display: block;
-				margin: 1em auto;
-				max-width: 50em;
-				width: 100%;
-			}
 			ol {
 				margin: 1em;
 			}
@@ -19,7 +13,7 @@ export default function ({ html, state }) {
 				margin: 1em;
 			}
 		</style>
-		<h2>Accounts</h2>
+		<h2>Authorizations</h2>
 		<ol>
 			${auths
 				? auths
@@ -29,6 +23,5 @@ export default function ({ html, state }) {
 		</ol>
 		<nav>
 			<a class="button" href="/login">add an account</a>
-			${auths && html`<a class="button" href="/timelines/home">Go to your Home Timeline</a>`}
 		</nav>`;
 }
