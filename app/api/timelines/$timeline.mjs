@@ -1,3 +1,4 @@
+import { isAuthorized } from '../../middleware.mjs';
 import fetch from 'node-fetch';
 /** @todo use node-fetch-cache */
 /** @see https://www.npmjs.com/package/node-fetch-cache */
@@ -12,7 +13,7 @@ import fetch from 'node-fetch';
 export async function fetchTimeline(access_token, host, timeline, max_id) {
 	const params = new URLSearchParams({ limit: '40' });
 	if (max_id) params.set('max_id', max_id);
-	console.debug('🌜fetchTimeline:', { params });
+	// console.debug('🌜fetchTimeline:', { params });
 	const response = await fetch(`https://${host}/api/v1/timelines/${timeline}?${params}`, {
 		headers: { Authorization: `Bearer ${access_token}` },
 		method: `GET`,
@@ -33,50 +34,48 @@ export async function fetchTimeline(access_token, host, timeline, max_id) {
 }
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function get(req) {
+export async function fetchAllTimelines(req) {
 	const { timeline } = req.params;
 	try {
 		const { session } = req;
 		/** @type {import('../../types').Authorizations} */
 		const authorizations = session.authorizations || [];
 		const { from } = req.query;
-		console.debug('🏠', { authorizations, from });
-		if (authorizations) {
-			const promises = authorizations.map(({ access_token, host }) => {
-				const request = fetchTimeline(access_token, host, timeline, from);
-				return { access_token, request };
-			});
-			const responses = await Promise.all(promises.map(({ request }) => request));
-			/** @type {import('../../types').StatusMap} */
-			const statuses = {};
-			/** @type {import('../../types').StatusIds} */
-			const statusIds = [];
-			for (let i = 0, n = promises.length; i < n; i++) {
-				const { access_token } = promises[i];
-				const auth = authorizations.find((auth) => auth.access_token === access_token);
-				const response = responses[i];
-				/** @todo handle error responses */
-				for (const status of response)
-					if (statusIds.includes(status.id)) {
-						statuses[status.id].authorizations.push(auth);
-					} else {
-						status.authorizations = [auth];
-						status.created_ms = new Date(status.created_at).valueOf();
-						statuses[status.id] = status;
-						// insert index in sorted order
-						const index = statusIds.findIndex(
-							(id) => statuses[id].created_ms < status.created_ms,
-						);
-						if (index === -1) statusIds.push(status.id);
-						else statusIds.splice(index, 0, status.id);
-					}
-			}
-			return { json: { authorizations, statuses, statusIds, timeline } };
-		} else {
-			return { location: '/login' };
+		// console.debug('🏠fetchAllTimelines', { authorizations, from });
+		const promises = authorizations.map(({ access_token, host }) => {
+			const request = fetchTimeline(access_token, host, timeline, from);
+			return { access_token, request };
+		});
+		const responses = await Promise.all(promises.map(({ request }) => request));
+		/** @type {import('../../types').StatusMap} */
+		const statuses = {};
+		/** @type {import('../../types').StatusIds} */
+		const statusIds = [];
+		for (let i = 0, n = promises.length; i < n; i++) {
+			const { access_token } = promises[i];
+			const auth = authorizations.find((auth) => auth.access_token === access_token);
+			const response = responses[i];
+			/** @todo handle error responses */
+			for (const status of response)
+				if (statusIds.includes(status.id)) {
+					statuses[status.id].authorizations.push(auth);
+				} else {
+					status.authorizations = [auth];
+					status.created_ms = new Date(status.created_at).valueOf();
+					statuses[status.id] = status;
+					// insert index in sorted order
+					const index = statusIds.findIndex(
+						(id) => statuses[id].created_ms < status.created_ms,
+					);
+					if (index === -1) statusIds.push(status.id);
+					else statusIds.splice(index, 0, status.id);
+				}
 		}
+		return { json: { authorizations, statuses, statusIds, timeline } };
 	} catch (error) {
 		console.error('☃️', { error });
 		return { json: { error: error.message, timeline } };
 	}
 }
+
+export const get = [isAuthorized, fetchAllTimelines];

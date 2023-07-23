@@ -9,7 +9,7 @@ export async function get(req) {
 	try {
 		const { code } = req.query;
 		const { client_id, client_secret, host, ...remainingSession } = session;
-		console.debug('🥒 GET /auth', { client_id, client_secret, code, host });
+		// console.debug('🥒 GET /auth', { client_id, client_secret, code, host });
 		if (client_id && client_secret && code && host) {
 			/** get a token
 			 * @see https://docs.joinmastodon.org/methods/oauth/#token */
@@ -24,7 +24,7 @@ export async function get(req) {
 			const response = await fetch(`https://${host}/oauth/token`, { method: `POST`, body });
 			/** @type {import('../types').TokenResponse} */
 			const data = await response.json();
-			console.debug('🍑 token response', { body, data });
+			// console.debug('🍑 token response', { body, data });
 			const { access_token } = data;
 			if (access_token) {
 				/** confirm that the access_token works.
@@ -34,14 +34,14 @@ export async function get(req) {
 				});
 				/** @type {import('../types').VerifyResponse} */
 				const data = await response.json();
-				console.debug('🍇 verify response', { data });
+				// console.debug('🍇 verify response', { data });
 				const { vapid_key } = data;
 				if (vapid_key) {
 					const priorAuth = authorizations.find(
 						(auth) => auth.access_token === access_token,
 					);
 					if (!priorAuth) authorizations.push({ access_token, host });
-					console.debug('🍈 login success!', { authorizations });
+					// console.debug('🍈 login success!', { authorizations });
 				} else {
 					const { status, statusText } = response;
 					const { error } = data;

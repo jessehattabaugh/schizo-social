@@ -1,12 +1,14 @@
+import { isAuthorized } from '../middleware.mjs';
+
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function get(req) {
+export async function fetchStatus(req) {
 	try {
 		const { session, query } = req;
 		const { authIndex, id } = query;
 
 		/** @type {import('../types').Authorizations} */
 		const authorizations = session.authorizations || [];
-		console.debug('🐛', { authorizations, id });
+		// console.debug('🐛', { authorizations, id });
 		const auth = authorizations[parseInt(authIndex)];
 		const { access_token, host } = auth;
 
@@ -19,10 +21,12 @@ export async function get(req) {
 		/** @type {import('../types').Status} */
 		const details = await response.json();
 		details.authorizations = [auth];
-		console.debug('🦋 status:get()', { auth, details });
+		// console.debug('🦋 status:get()', { auth, details });
 		return { json: { authorizations, details } };
 	} catch (error) {
-		console.error('🐞 status:get()', { error });
+		// console.error('🐞 status:get()', { error });
 		return { json: { error: error.message } };
 	}
 }
+
+export const get = [isAuthorized, fetchStatus];

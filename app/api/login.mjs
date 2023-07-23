@@ -17,7 +17,7 @@ export async function post(req) {
 	try {
 		// first try to load an existing app from the db
 		let app = await db.apps.get({ host });
-		console.debug('🐸', { app, host });
+		// console.debug('🐸', { app, host });
 		// TODO: test the app to make sure it's still valid, delete it if not
 		if (!app) {
 			// create a new app for this host
@@ -31,7 +31,7 @@ export async function post(req) {
 			if (response.ok) {
 				/** @type {import('../types').AppsResponse} */
 				const data = await response.json();
-				console.debug('💎 api/login post() fetch success:', data);
+				// console.debug('💎 api/login post() fetch success:', data);
 				app = { host, ...data };
 				await db.apps.put(app);
 			} else {
@@ -48,8 +48,7 @@ export async function post(req) {
 		});
 		const location = `https://${host}/oauth/authorize?${params.toString()}`;
 		const session = { ...req.session, ...app };
-		console.debug('💸 api/login post() session:', { location, session });
-
+		// console.debug('💸 api/login post() session:', { location, session });
 		return { location, session };
 	} catch (error) {
 		console.error('⛔api/login post() returning error', error);
