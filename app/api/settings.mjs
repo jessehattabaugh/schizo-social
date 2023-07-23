@@ -4,6 +4,7 @@ import { redirect_uri, scope } from '../constants.mjs';
 /** @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(request) {
 	const { session } = request;
+	const { themeColor = '#ff0000' } = session;
 	/** @type {import('../types').Authorizations} */
 	const authorizations = session.authorizations || [];
 	try {
@@ -56,7 +57,7 @@ export async function get(request) {
 			}
 		}
 		return {
-			json: { authorizations },
+			json: { authorizations, themeColor },
 			session: { ...remainingSession, authorizations },
 		};
 	} catch (error) {
@@ -66,4 +67,12 @@ export async function get(request) {
 			session: { ...session, error: 'authorization failed' },
 		};
 	}
+}
+
+/** @type {import('@enhance/types').EnhanceApiFn} */
+export async function post(request) {
+	const { session, body } = request;
+	const { themeColor } = body;
+	console.debug('🍊 POST /settings', { themeColor });
+	return { location: '/settings', session: { ...session, themeColor } };
 }
