@@ -9,11 +9,13 @@ import fetch from 'node-fetch';
  * @param {string} host
  * @param {string} timeline
  * @param {string} max_id
+ * @param {string} min_id
  */
-export async function fetchTimeline(access_token, host, timeline, max_id) {
+export async function fetchTimeline(access_token, host, timeline, max_id, min_id) {
 	const params = new URLSearchParams({ limit: '40' });
-	if (max_id) params.set('max_id', max_id);
-	// console.debug('🌜fetchTimeline:', { params });
+	if (max_id) params.append('max_id', max_id);
+	if (min_id) params.append('min_id', min_id);
+	console.debug('🌜fetchTimeline:', { params });
 	const response = await fetch(`https://${host}/api/v1/timelines/${timeline}?${params}`, {
 		headers: { Authorization: `Bearer ${access_token}` },
 		method: `GET`,
@@ -38,40 +40,66 @@ export async function fetchAllTimelines(req) {
 	const { timeline } = req.params;
 	try {
 		const { session } = req;
+
 		/** @type {import('../../types').Authorizations} */
 		const authorizations = session.authorizations || [];
-		const { from } = req.query;
-		// console.debug('🏠fetchAllTimelines', { authorizations, from });
-		const promises = authorizations.map(({ access_token, host }) => {
-			const request = fetchTimeline(access_token, host, timeline, from);
+
+		const _nextIds = req.query?.nextIds?.split(',');
+		const _prevIds = req.query?.prevIds?.split(',');
+		console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
+
+		const promises = authorizations.map(({ access_token, host }, i) => {
+			const request = fetchTimeline(
+				access_token,
+				host,
+				timeline,
+				_nextIds?.[i],
+				_prevIds?.[i],
+			);
 			return { access_token, request };
 		});
 		const responses = await Promise.all(promises.map(({ request }) => request));
+
 		/** @type {import('../../types').StatusMap} */
 		const statuses = {};
+
 		/** @type {import('../../types').StatusIds} */
 		const statusIds = [];
+
+		/** @type {string[]} */
+		const nextIds = [];
+
+		/** @type {string[]} */
+		const prevIds = [];
+
 		for (let i = 0, n = promises.length; i < n; i++) {
 			const { access_token } = promises[i];
 			const auth = authorizations.find((auth) => auth.access_token === access_token);
 			const response = responses[i];
-			/** @todo handle error responses */
+			/** @todo use allSettled and handle error responses */
+
+			/** store the first and last status' id for each server for pagination */
+			nextIds.push(response[response.length - 1]?.id);
+			prevIds.push(response[0]?.id);
+
 			for (const status of response)
 				if (statusIds.includes(status.id)) {
+					/** status already exists, add authorization to it
+					 * @todo check to make sure that status ids from different servers are the same */
 					statuses[status.id].authorizations.push(auth);
 				} else {
 					status.authorizations = [auth];
-					status.created_ms = new Date(status.created_at).valueOf();
+					status.created = new Date(status.created_at).valueOf();
 					statuses[status.id] = status;
-					// insert index in sorted order
+					/** insert index in sorted order */
 					const index = statusIds.findIndex(
-						(id) => statuses[id].created_ms < status.created_ms,
+						(id) => statuses[id].created < status.created,
 					);
 					if (index === -1) statusIds.push(status.id);
 					else statusIds.splice(index, 0, status.id);
 				}
 		}
-		return { json: { authorizations, statuses, statusIds, timeline } };
+		return { json: { authorizations, nextIds, prevIds, statuses, statusIds, timeline } };
 	} catch (error) {
 		console.error('☃️', { error });
 		return { json: { error: error.message, timeline } };

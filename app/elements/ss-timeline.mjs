@@ -1,11 +1,9 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { error, statusIds = [] } = state.store;
+	const { error, statusIds = [], nextIds = [], prevIds = [] } = state.store;
 	/** @type {import('../types').StatusIds} */
 	const StatusIds = statusIds;
-	// get the last id
-	const lastId = StatusIds[StatusIds.length - 1];
-	// console.debug('⌛', { error, lastId });
+	// console.debug('⌛', { error, nextIds, prevIds, StatusIds });
 	return html`<style>
 			.h-feed {
 				column-count: 1;
@@ -40,11 +38,18 @@ export default function ({ html, state }) {
 				text-align: right;
 			}
 		</style>
+		<nav>
+			<a class="button" href="?${new URLSearchParams({
+				prevIds: prevIds.join(','),
+			}).toString()}">Previous/Newer</a>
+		</nav>
 		<ol class="h-feed">
 			${StatusIds.map((id) => html`<li><ss-status id="${id}"></ss-status></li>`).join('\n')}
 		</ol>
 		<nav>
-			<a class="button" href="?from=${lastId}">Next</a>
+			<a class="button" href="?${new URLSearchParams({
+				nextIds: nextIds.join(','),
+			}).toString()}">Next/Older</a>
 		</nav
 		${error && html`<div class="error">${error}</div>`}`;
 }

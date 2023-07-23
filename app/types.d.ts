@@ -29,11 +29,11 @@ export interface AppsResponse {
 /** @see https://docs.joinmastodon.org/entities/Status/ */
 export interface Status {
 	account: Account;
-	authorizations?: Authorizations;
 	application: any;
+	authorizations?: Authorizations;
 	content: string;
 	created_at: string;
-	created_ms: number;
+	created: number;
 	emojis: Emoji[];
 	id: string;
 	media_attachments: Attachment[];
@@ -43,8 +43,8 @@ export interface Status {
 	spoiler_text: string;
 	tags: Tag[];
 	uri: string;
-	visibility: string;
 	url: string;
+	visibility: string;
 }
 
 export type Statuses = Status[];
