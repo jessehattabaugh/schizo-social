@@ -17,8 +17,8 @@ export async function post(request) {
 	const { host } = body;
 	try {
 		/** first try to load an existing app from the db */
-		let app = await db.apps.get({ host });
-		// console.debug('🐸', { app, host });
+		let app = await db.apps.get({ host, scope });
+		// console.debug('🐸', { app, host, scope });
 		/** @todo test the app to make sure it's still valid, delete it if not */
 		if (!app) {
 			// create a new app for this host
@@ -33,7 +33,7 @@ export async function post(request) {
 				/** @type {import('../types').AppsResponse} */
 				const data = await response.json();
 				// console.debug('💎 api/login post() fetch success:', data);
-				app = { host, ...data };
+				app = { host, scope, ...data };
 				await db.apps.put(app);
 			} else {
 				console.error('🍅 api/login post() fetch failure');

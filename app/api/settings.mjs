@@ -56,6 +56,7 @@ export async function get(request) {
 			}
 		}
 		return {
+			json: { authorizations },
 			session: { ...remainingSession, authorizations },
 		};
 	} catch (error) {

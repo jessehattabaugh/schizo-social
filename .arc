@@ -21,4 +21,5 @@ apps
 	host *String
 	id String
 	PointInTimeRecovery true
+	scope **String
 	vapid_key String
