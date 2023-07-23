@@ -17,8 +17,9 @@
 	"root": true,
 	"rules": {
 		"array-callback-return": "warn",
-		"arrow-body-style": ["warn", "always"],
-		"curly": "warn",
+		"arrow-body-style": ["warn", "as-needed"],
+		"curly": ["warn", "multi", "consistent"],
+		"filenames/match-regex": ["warn", "^\\$?[a-zA-Z0-9]+([_.-][a-zA-Z0-9]+)*$"],
 		"no-await-in-loop": "warn",
 		"no-constant-binary-expression": "warn",
 		"no-constructor-return": "warn",

@@ -1,10 +1,9 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { error, statuses = {} } = state.store;
-	const statusIds = Object.keys(statuses);
-	const [lastId] = statusIds.slice(-1);
-	// console.debug('⌛', { error, statusIds, lastId });
-
+	const { error, statusIds = [], nextIds = [], prevIds = [] } = state.store;
+	/** @type {import('../types').StatusIds} */
+	const StatusIds = statusIds;
+	// console.debug('⌛', { error, nextIds, prevIds, StatusIds });
 	return html`<style>
 			.h-feed {
 				column-count: 1;
@@ -35,21 +34,22 @@ export default function ({ html, state }) {
 					column-count: 6;
 				}
 			}
-			li {
-				list-style: none;
-			}
-			#nextLink {
-				font-size: larger;
-				padding: 0.5em;
+			nav {
+				text-align: right;
 			}
 		</style>
+		<nav>
+			<a class="button" href="?${new URLSearchParams({
+				prevIds: prevIds.join(','),
+			}).toString()}">Previous/Newer</a>
+		</nav>
 		<ol class="h-feed">
-			${statusIds
-				.map((statusId) => {
-					return html`<li><ss-status id="${statusId}"></ss-status></li>`;
-				})
-				.join('\n')}
+			${StatusIds.map((id) => html`<li><ss-status id="${id}"></ss-status></li>`).join('\n')}
 		</ol>
-		<a id="nextLink" href="?from=${lastId}">Next</a>
+		<nav>
+			<a class="button" href="?${new URLSearchParams({
+				nextIds: nextIds.join(','),
+			}).toString()}">Next/Older</a>
+		</nav
 		${error && html`<div class="error">${error}</div>`}`;
 }

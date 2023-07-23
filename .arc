@@ -10,7 +10,8 @@ runtime nodejs18.x
 enhance/arc-plugin-enhance
 
 @static
-fingerprint false
+compression true
+fingerprint true
 
 @tables
 apps
@@ -20,4 +21,5 @@ apps
 	host *String
 	id String
 	PointInTimeRecovery true
+	scope **String
 	vapid_key String

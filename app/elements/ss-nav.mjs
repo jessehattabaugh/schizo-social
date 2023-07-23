@@ -1,22 +1,28 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { access_token } = state.store;
-	const { active } = state.attrs;
+	const { authorizations, timeline } = state.store;
+	/** @type {import('../types').Authorizations} */
+	const auths = authorizations;
 	return html` <style>
 			nav {
-				text-align: right;
+				display: flex;
 			}
-			a {
-				border: outset 1px grey;
-				display: inline-block;
-				font-size: larger;
-				padding: 1em;
+			.active {
+				background-color: var(--theme);
+				color: white;
 			}
 		</style>
 		<nav>
-			${access_token
-				? html`<a href="/home" class="${active == 'home' && 'active'}">home</a>
-						<a href="/public" class="${active == 'public' && 'active'}">public</a>`
+			${auths
+				? html`<a href="/timelines/home" class="button ${timeline == 'home' && 'active'}"
+							>home</a
+						>
+						<a
+							href="/timelines/public"
+							class="button ${timeline == 'public' && 'active'}"
+							>public</a
+						>
+						<a href="/settings" class="button">settings</a>`
 				: html`<a href="/login">login</a>`}
 		</nav>`;
 }
