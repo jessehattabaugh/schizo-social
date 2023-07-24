@@ -17,8 +17,8 @@ export default function ({ html, state }) {
 			}
 			input {
 				background-color: black;
-				border: 1px solid currentColor;
-				color: currentColor;
+				border: 1px solid var(--theme-color);
+				color: var(--theme-color);
 				font-size: 1.5em;
 			}
 		</style>

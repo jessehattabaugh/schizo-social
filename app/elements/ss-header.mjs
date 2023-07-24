@@ -2,7 +2,7 @@
 export default function ({ html }) {
 	return html`<style>
 			header {
-				border-bottom: solid 0.5em currentColor;
+				border-bottom: solid 0.5em var(--theme-color);
 				display: flex;
 				justify-content: space-around;
 				vertical-align: middle;

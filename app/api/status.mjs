@@ -24,7 +24,7 @@ async function fetchStatus(req) {
 		// console.debug('🦋 status:get()', { auth, details });
 		return { json: { authorizations, details } };
 	} catch (error) {
-		// console.error('🐞 status:get()', { error });
+		console.error('🐞 status:get()', { error });
 		return { json: { error: error.message } };
 	}
 }
