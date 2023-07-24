@@ -6,6 +6,7 @@ async function redirectToHome(request) {
 	/** @type {import('../types').Authorizations} */
 	const auths = session.authorizations;
 	if (auths) return { location: '/timelines/home' };
+	else return {};
 }
 
 export const get = [applyTheme, redirectToHome];
