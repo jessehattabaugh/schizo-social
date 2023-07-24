@@ -1,7 +1,4 @@
-import { redirectToLogin } from '../../middleware.mjs';
-import fetch from 'node-fetch';
-/** @todo use node-fetch-cache */
-/** @see https://www.npmjs.com/package/node-fetch-cache */
+import { applyTheme, redirectToLogin } from '../../middleware.mjs';
 
 /** fetch the most recent posts in the user's home timeline
  * @see https://docs.joinmastodon.org/methods/timelines/#home
@@ -21,13 +18,9 @@ export async function fetchTimeline(access_token, host, timeline, max_id, min_id
 		method: `GET`,
 	});
 	if (response.ok) {
-		/** type jackassery due to Typescript/node-fetch's broken types
-		 * @see https://github.com/node-fetch/node-fetch/issues/1262
-		 * @type {Promise<any>} */
-		const promise = response.json();
 		/** @type {Promise<import('../../types').Statuses>} */
-		const Promise = promise;
-		return Promise;
+		const promise = response.json();
+		return promise;
 	} else {
 		throw new Error(
 			`could not fetch ${timeline} from ${host}: ${response.status} ${response.statusText}`,

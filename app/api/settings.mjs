@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { redirect_uri, scope } from '../constants.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */

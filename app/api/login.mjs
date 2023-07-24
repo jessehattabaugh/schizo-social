@@ -1,5 +1,4 @@
 import arc from '@architect/functions';
-import fetch from 'node-fetch';
 
 import { client_name, redirect_uri, scope, website } from '../constants.mjs';
 const db = await arc.tables();
