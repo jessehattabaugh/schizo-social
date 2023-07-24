@@ -9,7 +9,6 @@
 		"@enhance/types": "latest",
 		"eslint": "latest",
 		"eslint-config-prettier": "latest",
-		"node-fetch": "latest",
 		"tap-arc": "latest",
 		"tape": "latest",
 		"tiny-json-http": "latest"
