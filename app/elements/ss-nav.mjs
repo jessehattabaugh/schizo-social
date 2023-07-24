@@ -8,7 +8,7 @@ export default function ({ html, state }) {
 				display: flex;
 			}
 			.active {
-				background-color: var(--theme);
+				background-color: var(--theme-color);
 				color: white;
 			}
 		</style>
@@ -23,6 +23,6 @@ export default function ({ html, state }) {
 							>public</a
 						>
 						<a href="/settings" class="button">settings</a>`
-				: html`<a href="/login">login</a>`}
+				: html`<a href="/login" class="button">login</a>`}
 		</nav>`;
 }

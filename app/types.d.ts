@@ -1,3 +1,11 @@
+import {
+	EnhanceApiReq,
+	EnhanceApiRes,
+	EnhanceApiFn,
+	EnhanceHeadFn,
+	EnhanceHeadFnArg,
+	EnhanceElemResult,
+} from '@enhance/types';
 export interface Account {
 	avatar: string;
 	display_name: string;
@@ -58,6 +66,15 @@ export interface TokenResponse {
 	error_description?: string;
 }
 
+/** @see https://docs.joinmastodon.org/methods/timelines/ */
+export type TimelineResponse = Status[];
+
+/** themeing */
+export type ThemedApiReq = EnhanceApiReq & { themeColor: string };
+export type ThemedApiFn = (ThemedApiReq) => EnhanceApiRes;
+export type ThemedHeadFnArg = EnhanceHeadFnArg & { req: ThemedApiReq };
+export type ThemedHeadFn = (arg0: ThemedHeadFnArg) => EnhanceElemResult;
+
 /** @see https://docs.joinmastodon.org/methods/apps/#verify_credentials */
 export interface VerifyResponse {
 	error?: string;
@@ -65,6 +82,3 @@ export interface VerifyResponse {
 	vapid_key?: string;
 	website?: string;
 }
-
-/** @see https://docs.joinmastodon.org/methods/timelines/ */
-export type TimelineResponse = Status[];
