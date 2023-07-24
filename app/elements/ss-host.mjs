@@ -16,7 +16,10 @@ export default function ({ html, state }) {
 				margin: 1em;
 			}
 			input {
-				font-size: calc(max(5vw, 1.5em));
+				background-color: black;
+				border: 1px solid currentColor;
+				color: currentColor;
+				font-size: 1.5em;
 			}
 		</style>
 		<datalist id="hosts">
@@ -35,7 +38,7 @@ export default function ({ html, state }) {
 				pattern=".*\\..+"
 				placeholder="your.host.here"
 				required
-				title="The hostname of your ActivityPub server."
+				title="The hostname of your Mastodon server."
 				type="text"
 				value="${host}"
 			/>

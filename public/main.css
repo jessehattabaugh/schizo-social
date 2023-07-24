@@ -6,7 +6,6 @@
 	--error: orange;
 	--font-family-heading: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
 	--font-family: Geneva, Verdana, sans-serif;
-	--theme: red;
 }
 
 *,
@@ -19,7 +18,7 @@
 html {
 	background-color: var(--background-color);
 	box-sizing: border-box;
-	color: var(--color);
+	color: var(--theme-color);
 	font-family: var(--font-family);
 	height: 100%;
 }
@@ -35,7 +34,7 @@ a:active,
 a:focus,
 a:link,
 a:visited {
-	color: var(--theme);
+	color: currentColor;
 	text-decoration: none;
 }
 a:hover {
@@ -47,7 +46,7 @@ h3,
 h4,
 h5,
 h6 {
-	color: var(--theme);
+	color: currentColor;
 	font-family: var(--font-family-heading);
 }
 p {
@@ -61,7 +60,7 @@ dt::after {
 	content: ':';
 }
 .button {
-	border: outset 1px var(--theme);
+	border: outset 1px currentColor;
 	display: inline-block;
 	padding: 0.5em;
 }

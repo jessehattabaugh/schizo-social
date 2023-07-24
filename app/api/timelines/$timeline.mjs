@@ -8,7 +8,7 @@ import { applyTheme, redirectToLogin } from '../../middleware.mjs';
  * @param {string} max_id
  * @param {string} min_id
  */
-export async function fetchTimeline(access_token, host, timeline, max_id, min_id) {
+async function fetchTimeline(access_token, host, timeline, max_id, min_id) {
 	const params = new URLSearchParams({ limit: '40' });
 	if (max_id) params.append('max_id', max_id);
 	if (min_id) params.append('min_id', min_id);
@@ -29,7 +29,7 @@ export async function fetchTimeline(access_token, host, timeline, max_id, min_id
 }
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function fetchAllTimelines(request) {
+async function fetchAllTimelines(request) {
 	const { session, query, params } = request;
 	const { timeline } = params;
 	/** @type {import('../../types').Authorizations} */
@@ -98,4 +98,4 @@ export async function fetchAllTimelines(request) {
 	}
 }
 
-export const get = [redirectToLogin, fetchAllTimelines];
+export const get = [applyTheme, redirectToLogin, fetchAllTimelines];

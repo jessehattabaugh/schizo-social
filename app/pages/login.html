@@ -1,13 +1,17 @@
 <ss-header></ss-header>
-<main>
+<article>
 	<style>
 		form {
 			overflow-y: hidden;
 		}
 		[type=submit]{
+			appearance: none;
+			background-color: black;
+			border: currentColor 1px solid;
+			color: currentColor;
 			font-size: 1.25em;
-			padding: 0.25em;
 			margin: 1em;
+			padding: 0.25em;
 		}
 	</style>
 	<form method="post" action="/login" onsubmit="
@@ -15,5 +19,5 @@
 		<ss-host></ss-host>
 		<input type="submit" value="login" />
 	</form>
-</main>
+</article>
 <ss-footer></ss-footer>

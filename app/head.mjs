@@ -1,9 +1,9 @@
 import { client_name } from './constants.mjs';
 
-/** @type {import('@enhance/types').EnhanceHeadFn} */
-export default function Head(state) {
-	const { req } = state;
-	const { path } = req;
+/** @type {import('./types').ThemedHeadFn} */
+export default function Head(arg0) {
+	const { req } = arg0;
+	const { path, themeColor = '#ff0000' } = req;
 
 	return `<!DOCTYPE html>
 <html lang="en">
@@ -12,7 +12,7 @@ export default function Head(state) {
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="view-transition" content="same-origin" />
 
-		<title>${client_name}${path}</title>
+		<title>${client_name}/${path}</title>
 		<meta name="description" content="mastodon client with a focus on performance" />
 		<meta name="theme-color" content="#000000" />
 
@@ -24,6 +24,11 @@ export default function Head(state) {
 		<link rel="manifest" href="/_public/manifest.json" />
 
 		<script async type="module" src="/_public/browser/async.mjs"></script>
+		<style>
+			:root {
+				--theme-color: ${themeColor}
+			}
+		</style>
 	</head>
 </html>`;
 }

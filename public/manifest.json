@@ -15,8 +15,8 @@
 			"type": "image/png"
 		}
 	],
-	"name": "schizo.social",
-	"short_name": "schizo",
+	"name": "Schizo.social",
+	"short_name": "Schizo.social",
 	"start_url": "/login?pwa_start_url",
 	"theme_color": "#ff0000"
 }

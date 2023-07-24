@@ -44,12 +44,12 @@ export default function ({ html, state }) {
 		status &&
 		html`<style>
 				.h-entry {
+					block-size: max-content;
 					border-radius: 0.25em;
 					border: 1px inset grey;
 					margin: 1em auto;
 					max-width: 50em;
 					overflow-x: hidden;
-					block-size: max-content;
 				}
 				@keyframes scale {
 					from {

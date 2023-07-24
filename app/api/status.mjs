@@ -1,7 +1,7 @@
-import { redirectToLogin } from '../middleware.mjs';
+import { applyTheme, redirectToLogin } from '../middleware.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function fetchStatus(req) {
+async function fetchStatus(req) {
 	try {
 		const { session, query } = req;
 		const { authIndex, id } = query;
@@ -29,4 +29,4 @@ export async function fetchStatus(req) {
 	}
 }
 
-export const get = [redirectToLogin, fetchStatus];
+export const get = [applyTheme, redirectToLogin, fetchStatus];

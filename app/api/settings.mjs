@@ -1,7 +1,8 @@
 import { redirect_uri, scope } from '../constants.mjs';
+import { applyTheme } from '../middleware.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-export async function get(request) {
+async function handleAuthorization(request) {
 	const { session } = request;
 	const { themeColor = '#ff0000' } = session;
 	/** @type {import('../types').Authorizations} */
@@ -75,3 +76,5 @@ export async function post(request) {
 	console.debug('🍊 POST /settings', { themeColor });
 	return { location: '/settings', session: { ...session, themeColor } };
 }
+
+export const get = [applyTheme, handleAuthorization];
