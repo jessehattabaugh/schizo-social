@@ -35,7 +35,7 @@ export default function ({ html, state }) {
 				}
 			}
 			nav {
-				text-align: right;
+				text-align: center;
 			}
 		</style>
 		<nav>
