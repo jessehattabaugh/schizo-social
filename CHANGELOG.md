@@ -1,5 +1,13 @@
 # Change Log
 
+## July 24th 2023
+
+Multi-account authorization works!! It was quite a lot of work, but I think it was worth it! I want managing multiple accounts at the same time to be one of the trademark features of this app. Currently you can just view the home and public timelines of all your accounts together, and page forward and backward through them at the same time.
+
+There are some improvements left to make; duplicates are being displayed #17, and occasionally when paging there are errors with fetching the timelines. I am using Promise.all which means that if any of the fetches fail they all fail. So I should probably use Promise.allSettled and handle the errors in indivuidual accounts somehow. #22
+
+Also I implemented theme color because it seemed like it'd be easy and it pretty much was.
+
 ## July 17th 2023
 
 I implemented a detail page for statuses, and used the multi-page ViewTransition API to transition to it. The CSS is still janky so the transitions aren't smooth, so I'll need to figure out what's going on there. I also implemented a fullscreen view of attachment images, these use single page View Transitions and are similarly janky. Oh and I fixed reblogs.
