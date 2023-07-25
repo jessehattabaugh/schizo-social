@@ -91,7 +91,17 @@ async function fetchAllTimelines(request) {
 					else statusIds.splice(index, 0, status.id);
 				}
 		}
-		return { json: { authorizations, nextIds, prevIds, statuses, statusIds, timeline } };
+		return {
+			json: {
+				authorizations,
+				nextIds,
+				prevIds,
+				statuses,
+				statusIds,
+				timeline,
+				scrollToBottom: _prevIds.length,
+			},
+		};
 	} catch (error) {
 		console.error('☃️', { error });
 		return { json: { error: error.message, timeline } };

@@ -1,9 +1,9 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { error, statusIds = [], nextIds = [], prevIds = [] } = state.store;
+	const { error, statusIds = [], nextIds = [], prevIds = [], scrollToBottom } = state.store;
 	/** @type {import('../types').StatusIds} */
 	const StatusIds = statusIds;
-	// console.debug('⌛', { error, nextIds, prevIds, StatusIds });
+	console.debug('⌛', { error, nextIds, prevIds, scrollToBottom });
 	return html`<style>
 			.h-feed {
 				column-count: 1;
@@ -39,17 +39,32 @@ export default function ({ html, state }) {
 			}
 		</style>
 		<nav>
-			<a class="button" href="?${new URLSearchParams({
-				prevIds: prevIds.join(','),
-			}).toString()}">Previous/Newer</a>
+			<a
+				class="button"
+				href="?${new URLSearchParams({
+					prevIds: prevIds.join(','),
+				}).toString()}"
+				>Previous/Newer</a
+			>
 		</nav>
 		<ol class="h-feed">
 			${StatusIds.map((id) => html`<li><ss-status id="${id}"></ss-status></li>`).join('\n')}
 		</ol>
 		<nav>
-			<a class="button" href="?${new URLSearchParams({
-				nextIds: nextIds.join(','),
-			}).toString()}">Next/Older</a>
-		</nav
-		${error && html`<div class="error">${error}</div>`}`;
+			<a
+				class="button"
+				href="?${new URLSearchParams({
+					nextIds: nextIds.join(','),
+				}).toString()}"
+				>Next/Older</a
+			>
+		</nav>
+		${error && html`<div class="error">${error}</div>`}
+		${scrollToBottom
+			? html`<script>
+					window.onload = function () {
+						window.scrollTo(0, document.body.scrollHeight);
+					};
+			  </script>`
+			: ''}`;
 }
