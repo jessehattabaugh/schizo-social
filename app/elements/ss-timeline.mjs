@@ -1,6 +1,6 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
-	const { error, statusIds = [], nextIds = [], prevIds = [], scrollToBottom } = state.store;
+	const { error, statusIds = [], nextIds = [], prevIds = [] } = state.store;
 	/** @type {import('../types').StatusIds} */
 	const StatusIds = statusIds;
 	// console.debug('⌛', { error, nextIds, prevIds, scrollToBottom });
@@ -43,7 +43,7 @@ export default function ({ html, state }) {
 				class="button"
 				href="?${new URLSearchParams({
 					prevIds: prevIds.join(','),
-				}).toString()}"
+				}).toString()}#bottom"
 				>Previous/Newer</a
 			>
 		</nav>
@@ -56,15 +56,9 @@ export default function ({ html, state }) {
 				href="?${new URLSearchParams({
 					nextIds: nextIds.join(','),
 				}).toString()}"
+				name="bottom"
 				>Next/Older</a
 			>
 		</nav>
-		${error && html`<div class="error">${error}</div>`}
-		${scrollToBottom
-			? html`<script>
-					window.onload = function () {
-						window.scrollTo(0, document.body.scrollHeight);
-					};
-			  </script>`
-			: ''}`;
+		${error && html`<div class="error">${error}</div>`}`;
 }
