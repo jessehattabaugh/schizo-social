@@ -34,11 +34,9 @@ async function fetchAllTimelines(request) {
 	const { timeline } = params;
 	/** @type {import('../../types').Authorizations} */
 	const authorizations = session.authorizations || [];
-
 	const _nextIds = query?.nextIds?.split(',');
 	const _prevIds = query?.prevIds?.split(',');
 	// console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
-
 	try {
 		const promises = authorizations.map(({ access_token, host }, i) => {
 			const promise = fetchTimeline(
@@ -92,14 +90,7 @@ async function fetchAllTimelines(request) {
 				}
 		}
 		return {
-			json: {
-				nextIds,
-				prevIds,
-				statuses,
-				statusIds,
-				timeline,
-				scrollToBottom: _prevIds?.length,
-			},
+			json: { nextIds, prevIds, statuses, statusIds, timeline },
 		};
 	} catch (error) {
 		console.error('☃️', { error });
