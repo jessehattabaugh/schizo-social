@@ -1,12 +1,11 @@
 import arc from '@architect/functions';
 
 import { client_name, redirect_uri, scope, website } from '../constants.mjs';
-import { applyTheme } from '../middleware.mjs';
 
 const db = await arc.tables();
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-async function getPreviousLogin(request) {
+export async function get(request) {
 	/** handle errors from previous login attempts */
 	const { error, host } = request.session;
 	return { json: { error, host } };
@@ -57,4 +56,3 @@ export async function post(request) {
 	}
 }
 
-export const get = [applyTheme, getPreviousLogin];

@@ -3,7 +3,7 @@ export default function ({ html, state }) {
 	const { error, statusIds = [], nextIds = [], prevIds = [], scrollToBottom } = state.store;
 	/** @type {import('../types').StatusIds} */
 	const StatusIds = statusIds;
-	console.debug('⌛', { error, nextIds, prevIds, scrollToBottom });
+	// console.debug('⌛', { error, nextIds, prevIds, scrollToBottom });
 	return html`<style>
 			.h-feed {
 				column-count: 1;

@@ -1,8 +1,7 @@
 import { redirect_uri, scope } from '../constants.mjs';
-import { applyTheme } from '../middleware.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
-async function handleAuthorization(request) {
+export async function get(request) {
 	const { session } = request;
 	const { themeColor = '#ff0000' } = session;
 	/** @type {import('../types').Authorizations} */
@@ -57,7 +56,7 @@ async function handleAuthorization(request) {
 			}
 		}
 		return {
-			json: { authorizations, themeColor },
+			json: { themeColor },
 			session: { ...remainingSession, authorizations },
 		};
 	} catch (error) {
@@ -76,5 +75,3 @@ export async function post(request) {
 	console.debug('🍊 POST /settings', { themeColor });
 	return { location: '/settings', session: { ...session, themeColor } };
 }
-
-export const get = [applyTheme, handleAuthorization];

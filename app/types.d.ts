@@ -69,12 +69,6 @@ export interface TokenResponse {
 /** @see https://docs.joinmastodon.org/methods/timelines/ */
 export type TimelineResponse = Status[];
 
-/** themeing */
-export type ThemedApiReq = EnhanceApiReq & { themeColor: string };
-export type ThemedApiFn = (ThemedApiReq) => EnhanceApiRes;
-export type ThemedHeadFnArg = EnhanceHeadFnArg & { req: ThemedApiReq };
-export type ThemedHeadFn = (arg0: ThemedHeadFnArg) => EnhanceElemResult;
-
 /** @see https://docs.joinmastodon.org/methods/apps/#verify_credentials */
 export interface VerifyResponse {
 	error?: string;

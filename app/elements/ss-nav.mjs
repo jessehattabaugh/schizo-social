@@ -13,7 +13,7 @@ export default function ({ html, state }) {
 			}
 		</style>
 		<nav>
-			${auths
+			${auths.length
 				? html`<a href="/timelines/home" class="button ${timeline == 'home' && 'active'}"
 							>home</a
 						>
