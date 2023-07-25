@@ -1,4 +1,4 @@
-import { applyTheme, redirectToLogin } from '../../middleware.mjs';
+import { redirectToLogin } from '../../middleware.mjs';
 
 /** fetch the most recent posts in the user's home timeline
  * @see https://docs.joinmastodon.org/methods/timelines/#home
@@ -12,7 +12,7 @@ async function fetchTimeline(access_token, host, timeline, max_id, min_id) {
 	const params = new URLSearchParams({ limit: '40' });
 	if (max_id) params.append('max_id', max_id);
 	if (min_id) params.append('min_id', min_id);
-	console.debug('🌜fetchTimeline:', { params });
+	// console.debug('🌜fetchTimeline:', { params });
 	const response = await fetch(`https://${host}/api/v1/timelines/${timeline}?${params}`, {
 		headers: { Authorization: `Bearer ${access_token}` },
 		method: `GET`,
@@ -37,7 +37,7 @@ async function fetchAllTimelines(request) {
 
 	const _nextIds = query?.nextIds?.split(',');
 	const _prevIds = query?.prevIds?.split(',');
-	console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
+	// console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
 
 	try {
 		const promises = authorizations.map(({ access_token, host }, i) => {
@@ -93,13 +93,12 @@ async function fetchAllTimelines(request) {
 		}
 		return {
 			json: {
-				authorizations,
 				nextIds,
 				prevIds,
 				statuses,
 				statusIds,
 				timeline,
-				scrollToBottom: _prevIds.length,
+				scrollToBottom: _prevIds?.length,
 			},
 		};
 	} catch (error) {
@@ -108,4 +107,4 @@ async function fetchAllTimelines(request) {
 	}
 }
 
-export const get = [applyTheme, redirectToLogin, fetchAllTimelines];
+export const get = [redirectToLogin, fetchAllTimelines];

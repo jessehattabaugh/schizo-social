@@ -1,4 +1,4 @@
-import { applyTheme, redirectToLogin } from '../middleware.mjs';
+import { redirectToLogin } from '../middleware.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 async function fetchStatus(req) {
@@ -22,11 +22,11 @@ async function fetchStatus(req) {
 		const details = await response.json();
 		details.authorizations = [auth];
 		// console.debug('🦋 status:get()', { auth, details });
-		return { json: { authorizations, details } };
+		return { json: { details } };
 	} catch (error) {
 		console.error('🐞 status:get()', { error });
 		return { json: { error: error.message } };
 	}
 }
 
-export const get = [applyTheme, redirectToLogin, fetchStatus];
+export const get = [redirectToLogin, fetchStatus];

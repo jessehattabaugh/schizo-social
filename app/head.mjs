@@ -1,9 +1,11 @@
 import { client_name } from './constants.mjs';
 
-/** @type {import('./types').ThemedHeadFn} */
+/** @type {import('@enhance/types').EnhanceHeadFn}*/
 export default function Head(arg0) {
-	const { req } = arg0;
-	const { path, themeColor = '#ff0000' } = req;
+	const { req, store } = arg0;
+	const { path, session } = req;
+	const { authorizations = [], themeColor = '#ff0000' } = session;
+	store.authorizations = authorizations;
 
 	return `<!DOCTYPE html>
 <html lang="en">
@@ -12,7 +14,7 @@ export default function Head(arg0) {
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="view-transition" content="same-origin" />
 
-		<title>${client_name}/${path}</title>
+		<title>${client_name}${path}</title>
 		<meta name="description" content="mastodon client with a focus on performance" />
 		<meta name="theme-color" content="#000000" />
 

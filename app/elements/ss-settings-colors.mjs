@@ -8,7 +8,7 @@ export default function ({ html, state }) {
 				>Theme
 				<input
 					name="themeColor"
-					onchange="console.debug('🏳️‍🌈color change', event.target.value); this.form.submit();"
+					onchange="this.form.submit();"
 					type="color"
 					value="${themeColor}"
 			/></label>

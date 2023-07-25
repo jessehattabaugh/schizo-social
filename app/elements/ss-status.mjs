@@ -19,7 +19,7 @@ export default function ({ html, state }) {
 	const authIndex = auths
 		.findIndex(({ access_token }) => access_token === firstAuth.access_token)
 		.toString();
-	console.debug('🛻 ss-status', { authIndex, auths, firstAuth, id, status });
+	// console.debug('🛻 ss-status', { authIndex, auths, firstAuth, id, status });
 
 	const { authorizations } = status;
 	// if status is a reblog, use the reblogged status
@@ -164,14 +164,13 @@ export default function ({ html, state }) {
 				${media_attachments
 					.map((attachment) => {
 						const { type, url: fullsize_url, description, preview_url } = attachment;
-						return (
-							type == 'image' &&
-							html`<ss-image
-								description=${description}
-								fullsize_url=${fullsize_url}
-								preview_url=${preview_url}
-							></ss-image>`
-						);
+						return type == 'image'
+							? html`<ss-image
+									description=${description}
+									fullsize_url=${fullsize_url}
+									preview_url=${preview_url}
+							  ></ss-image>`
+							: '[attachment cannot be displayed, yet]';
 					})
 					.join('\n')}
 			</section>
