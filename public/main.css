@@ -72,3 +72,9 @@ body > article {
 body > article > * {
 	margin : 1em;
 }
+:root::view-transition-new(*) {
+	animation: scale 10s ease-in forwards;
+}
+:root::view-transition-old(*) {
+	animation: scale 10s ease-out reverse;
+}

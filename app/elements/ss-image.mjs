@@ -2,9 +2,15 @@
 export default function ({ html, state }) {
 	const { aspect_ratio, description, fullsize_url, preview_url } = state.attrs;
 	return html`<style>
+			picture {
+				width: 100%;
+				height: auto;
+				overflow: hidden;
+			}
 			img {
 				width: 100%;
 				height: auto;
+				object-fit: cover;
 			}
 			dialog {
 				margin: auto;
@@ -14,7 +20,10 @@ export default function ({ html, state }) {
 				backdrop-filter: blur(1em);
 			}
 		</style>
-		<picture onclick="event.currentTarget.nextElementSibling.showModal();">
+		<picture
+			onclick="event.currentTarget.nextElementSibling.showModal();"
+			style="aspect-ratio: ${aspect_ratio}"
+		>
 			<source media="(min-width: 600px)" srcset="${fullsize_url}" />
 			<img
 				alt="${description || 'no description'}"
@@ -24,7 +33,7 @@ export default function ({ html, state }) {
 			/>
 		</picture>
 		<dialog onclick="if (event.target === this) this.close();">
-			<picture>
+			<picture style="aspect-ratio: ${aspect_ratio}">
 				<source media="(min-width: 600px)" srcset="${fullsize_url}" />
 				<img
 					alt="${description || 'no description'}"

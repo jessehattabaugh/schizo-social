@@ -6,11 +6,3 @@ export async function redirectToLogin(request) {
 	if (!auths) return { location: '/login' };
 	/** @todo store the path they were trying to view in the session so they can be returned */
 }
-
-/** @type {import('./types').ThemedApiFn}*/
-export async function applyTheme(request) {
-	const { session } = request;
-	const { themeColor } = session;
-	request.themeColor = themeColor;
-	return;
-}
