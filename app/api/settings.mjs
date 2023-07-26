@@ -56,7 +56,7 @@ export async function get(request) {
 			}
 		}
 		return {
-			json: { themeColor },
+			json: { themeColor, authorizations },
 			session: { ...remainingSession, authorizations },
 		};
 	} catch (error) {
