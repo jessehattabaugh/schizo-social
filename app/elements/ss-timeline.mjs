@@ -7,7 +7,7 @@ export default function ({ html, state }) {
 	return html`<style>
 			.h-feed {
 				column-count: 1;
-				column-gap: 0.25em;
+				gap: 0.25em;
 			}
 			@media (min-width: 600px) {
 				.h-feed {
@@ -34,16 +34,20 @@ export default function ({ html, state }) {
 					column-count: 6;
 				}
 			}
+			li {
+				margin-top: 0.25em;
+			}
 			@supports (grid-template-rows: masonry) {
 				.h-feed {
 					column-count: none;
 					display: grid;
-					gap: 0.25em;
 					grid-template-columns: repeat(auto-fill, minmax(25em, 1fr));
 					grid-template-rows: masonry;
+					masonry-auto-flow: ordered;
 					place-items: center;
 				}
 				li {
+					margin-top: 0 !important; /* until enhance transforms @supports*/
 					width: 100%;
 				}
 			}

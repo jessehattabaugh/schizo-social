@@ -45,7 +45,7 @@ export default function ({ html, state }) {
 				block-size: max-content;
 				border-radius: 0.25em;
 				border: 1px inset grey;
-				margin: 1em auto;
+				margin: auto;
 				overflow-x: hidden;
 			}
 			@keyframes scale {
@@ -56,12 +56,7 @@ export default function ({ html, state }) {
 					transform: scale(0);
 				}
 			}
-			.h-entry::view-transition-new(*) {
-				animation: scale 10s ease-in forwards;
-			}
-			.h-entry::view-transition-old(*) {
-				animation: scale 10s ease-out reverse;
-			}
+			
 			.h-card {
 				border-bottom: 1px outset grey;
 			}
