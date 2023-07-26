@@ -34,6 +34,19 @@ export default function ({ html, state }) {
 					column-count: 6;
 				}
 			}
+			@supports (grid-template-rows: masonry) {
+				.h-feed {
+					column-count: none;
+					display: grid;
+					gap: 0.25em;
+					grid-template-columns: repeat(auto-fill, minmax(25em, 1fr));
+					grid-template-rows: masonry;
+					place-items: center;
+				}
+				li {
+					width: 100%;
+				}
+			}
 			nav {
 				text-align: center;
 			}

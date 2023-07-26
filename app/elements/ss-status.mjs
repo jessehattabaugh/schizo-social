@@ -46,7 +46,6 @@ export default function ({ html, state }) {
 				border-radius: 0.25em;
 				border: 1px inset grey;
 				margin: 1em auto;
-				max-width: 50em;
 				overflow-x: hidden;
 			}
 			@keyframes scale {
@@ -163,12 +162,20 @@ export default function ({ html, state }) {
 			<section class="attachments">
 				${media_attachments
 					.map((attachment) => {
-						const { type, url: fullsize_url, description, preview_url } = attachment;
+						const {
+							type,
+							url: fullsize_url,
+							description,
+							meta,
+							preview_url,
+						} = attachment;
+						const aspect = meta?.small?.aspect || meta?.original?.aspect || 1;
 						return type == 'image'
 							? html`<ss-image
 									description=${description}
 									fullsize_url=${fullsize_url}
 									preview_url=${preview_url}
+									aspect_ratio=${aspect.toString()}
 							  ></ss-image>`
 							: '[attachment cannot be displayed, yet]';
 					})

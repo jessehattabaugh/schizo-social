@@ -24,6 +24,7 @@ export interface Attachment {
 	preview_url: string;
 	type: string;
 	url: string;
+	meta: { small: { aspect: number }; original: { aspect: number } };
 }
 
 /** @see https://docs.joinmastodon.org/methods/apps/#create */
