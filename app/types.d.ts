@@ -35,6 +35,18 @@ export interface AppsResponse {
 	vapid_key?: string;
 }
 
+interface FilterResult {
+	filter: {
+		id: string;
+		title: string;
+		context: string[];
+		expires_at: string;
+		filter_actions: string;
+	};
+	keyword_matches: string[];
+	status_matches: string[];
+}
+
 /** @see https://docs.joinmastodon.org/entities/Status/ */
 export interface Status {
 	account: Account;
@@ -44,6 +56,7 @@ export interface Status {
 	created_at: string;
 	created: number;
 	emojis: Emoji[];
+	filtered: FilterResult[];
 	id: string;
 	media_attachments: Attachment[];
 	mentions: Mention[];
