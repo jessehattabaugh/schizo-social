@@ -61,7 +61,6 @@ export default function ({ html, state }) {
 			}
 			.u-photo {
 				box-shadow: 0.1em 0.1em 0.02em black;
-				vertical-align: middle;
 				aspect-ratio: 1;
 				object-fit: scale-down;
 			}
@@ -87,6 +86,9 @@ export default function ({ html, state }) {
 				font-weight: bold;
 				padding: 0.5em;
 				text-shadow: 0.05em 0.05em 0.02em black;
+			}
+			summary > * {
+				vertical-align: middle;
 			}
 			.p-name {
 				display: inline;
@@ -134,7 +136,7 @@ export default function ({ html, state }) {
 				text-align: left;
 			}
 		</style>
-		<article class="h-entry" style="view-transition-name: status-${id}">
+		<article class="h-entry" style="view-transition-name: status-${id};">
 			<header class="h-card">
 				<details style="background-image: url('${header}')">
 					<summary>
