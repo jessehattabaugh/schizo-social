@@ -26,6 +26,7 @@ export default function ({ html, state }) {
 	const {
 		content,
 		created_at,
+		filtered,
 		media_attachments,
 		spoiler_text,
 		url: status_url,
@@ -79,7 +80,7 @@ export default function ({ html, state }) {
 			.spoiler_text {
 				font-family: var(--font-family-heading);
 			}
-			details {
+			.h-card details {
 				background-position: center;
 				background-size: cover;
 				font-family: var(--font-family-heading);
@@ -87,7 +88,7 @@ export default function ({ html, state }) {
 				padding: 0.5em;
 				text-shadow: 0.05em 0.05em 0.02em black;
 			}
-			summary > * {
+			.h-card summary > * {
 				vertical-align: middle;
 			}
 			.p-name {
@@ -135,8 +136,51 @@ export default function ({ html, state }) {
 				flex: 1;
 				text-align: left;
 			}
+			.filtered {
+				color: #666;
+			}
 		</style>
-		<article class="h-entry" style="view-transition-name: status-${id};">
+		${filtered.length
+			? html`<details class="filtered">
+					<summary>
+						${filtered
+							.map(({ filter }) => html`<code>${filter.title}</code>`)
+							.join(', ')}
+					</summary>
+					${filtered
+						.map(
+							({ filter, keyword_matches }) =>
+								html`<p>
+									<code>${filter.title}</code> matched
+									"${keyword_matches.join('", "')}"
+								</p>`,
+						)
+						.join('')}
+					<button
+						onclick="
+						this.parentElement.nextElementSibling.style.display = 'block';
+						this.nextElementSibling.style.display = 'block';
+						this.style.display = 'none'"
+					>
+						show anyway
+					</button>
+					<button
+						onclick="
+						this.parentElement.nextElementSibling.style.display = 'none';
+						this.previousElementSibling.style.display = 'block';
+						this.style.display = 'none';"
+						style="display: none;"
+					>
+						hide again
+					</button>
+			  </details>`
+			: ''}
+		<article
+			class="h-entry"
+			style="view-transition-name: status-${id}; display: ${filtered.length
+				? 'none'
+				: 'block'};"
+		>
 			<header class="h-card">
 				<details style="background-image: url('${header}')">
 					<summary>
