@@ -10,7 +10,7 @@ export default function ({ html, state }) {
 			img {
 				width: 100%;
 				height: auto;
-				object-fit: cover;
+				object-fit: scale-down;
 			}
 			dialog {
 				margin: auto;

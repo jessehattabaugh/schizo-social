@@ -56,14 +56,14 @@ export default function ({ html, state }) {
 					transform: scale(0);
 				}
 			}
-			
 			.h-card {
 				border-bottom: 1px outset grey;
 			}
 			.u-photo {
 				box-shadow: 0.1em 0.1em 0.02em black;
-				min-width: 3em;
 				vertical-align: middle;
+				aspect-ratio: 1;
+				object-fit: scale-down;
 			}
 			section {
 				clear: both;
@@ -154,28 +154,30 @@ export default function ({ html, state }) {
 			</header>
 			${spoiler_text ? html`<section class="spoiler_text">${spoiler_text}</section>` : ''}
 			<section class="e-content">${content}</section>
-			<section class="attachments">
-				${media_attachments
-					.map((attachment) => {
-						const {
-							type,
-							url: fullsize_url,
-							description,
-							meta,
-							preview_url,
-						} = attachment;
-						const aspect = meta?.small?.aspect || meta?.original?.aspect || 1;
-						return type == 'image'
-							? html`<ss-image
-									description=${description}
-									fullsize_url=${fullsize_url}
-									preview_url=${preview_url}
-									aspect_ratio=${aspect.toString()}
-							  ></ss-image>`
-							: '[attachment cannot be displayed, yet]';
-					})
-					.join('\n')}
-			</section>
+			${media_attachments.length
+				? html`<section class="attachments">
+						${media_attachments
+							.map((attachment) => {
+								const {
+									type,
+									url: fullsize_url,
+									description,
+									meta,
+									preview_url,
+								} = attachment;
+								const aspect = meta?.small?.aspect || meta?.original?.aspect || 1;
+								return type == 'image'
+									? html`<ss-image
+											description=${description}
+											fullsize_url=${fullsize_url}
+											preview_url=${preview_url}
+											aspect_ratio=${aspect.toString()}
+									  ></ss-image>`
+									: '[attachment cannot be displayed, yet]';
+							})
+							.join('\n')}
+				  </section>`
+				: ''}
 			<h5>
 				${Details
 					? html`<dl>
