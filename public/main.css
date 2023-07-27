@@ -50,8 +50,10 @@ h6 {
 	font-family: var(--font-family-heading);
 }
 p {
-	margin-bottom: 1em;
 	font-size: larger;
+}
+p:not(:last-child) {
+	margin-bottom: 1em;
 }
 li {
 	list-style: none;

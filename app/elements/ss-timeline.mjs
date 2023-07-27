@@ -7,7 +7,7 @@ export default function ({ html, state }) {
 	return html`<style>
 			.h-feed {
 				column-count: 1;
-				gap: 0.25em;
+				gap: 0.5em;
 			}
 			@media (min-width: 600px) {
 				.h-feed {
@@ -35,7 +35,7 @@ export default function ({ html, state }) {
 				}
 			}
 			li {
-				margin-top: 0.25em;
+				margin-top: 0.5em;
 			}
 			@supports (grid-template-rows: masonry) {
 				.h-feed {
@@ -61,7 +61,7 @@ export default function ({ html, state }) {
 				href="?${new URLSearchParams({
 					prevIds: prevIds.join(','),
 				}).toString()}#bottom"
-				>Previous/Newer</a
+				>^^ Previous/Newer ^^</a
 			>
 		</nav>
 		<ol class="h-feed">
@@ -74,7 +74,7 @@ export default function ({ html, state }) {
 					nextIds: nextIds.join(','),
 				}).toString()}"
 				name="bottom"
-				>Next/Older</a
+				>⌄⌄ Next/Older ⌄⌄</a
 			>
 		</nav>
 		${error && html`<div class="error">${error}</div>`}`;
