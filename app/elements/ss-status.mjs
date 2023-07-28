@@ -257,6 +257,6 @@ export default function ({ html, state }) {
 							>details &gt;</a
 					  >`}
 			</h5>
-			<pre>${JSON.stringify(status)}</pre>
+			<pre>${JSON.stringify(status, null, 2)}</pre>
 		</article>`;
 }

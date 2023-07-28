@@ -47,7 +47,7 @@ export default function ({ html, state }) {
 					place-items: center;
 				}
 				li {
-					margin-top: 0 !important; /* until enhance transforms @supports*/
+					margin-top: 0;
 					width: 100%;
 				}
 			}

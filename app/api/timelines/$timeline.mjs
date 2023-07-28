@@ -2,14 +2,15 @@ import { redirectToLogin } from '../../middleware.mjs';
 
 /** fetch the most recent posts in the user's home timeline
  * @see https://docs.joinmastodon.org/methods/timelines/#home
+ * @param {string} limit
  * @param {string} access_token
  * @param {string} host
  * @param {string} timeline
  * @param {string} max_id
  * @param {string} min_id
  */
-async function fetchTimeline(access_token, host, timeline, max_id, min_id) {
-	const params = new URLSearchParams({ limit: '40' });
+async function fetchTimeline(limit, access_token, host, timeline, max_id, min_id) {
+	const params = new URLSearchParams({ limit });
 	if (max_id) params.append('max_id', max_id);
 	if (min_id) params.append('min_id', min_id);
 	// console.debug('🌜fetchTimeline:', { params });
@@ -40,6 +41,7 @@ async function fetchAllTimelines(request) {
 	try {
 		const promises = authorizations.map(({ access_token, host }, i) => {
 			const promise = fetchTimeline(
+				(40 / authorizations.length).toString(),
 				access_token,
 				host,
 				timeline,
@@ -66,6 +68,7 @@ async function fetchAllTimelines(request) {
 			const { access_token } = promises[i];
 			const auth = authorizations.find((auth) => auth.access_token === access_token);
 			const response = responses[i];
+			console.debug('🏠fetchAllTimelines', { auth, response });
 			/** @todo use allSettled and handle error responses */
 
 			/** store the first and last status' id for each server for pagination */
