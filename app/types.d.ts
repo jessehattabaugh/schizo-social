@@ -37,15 +37,41 @@ export interface AppsResponse {
 
 interface FilterResult {
 	filter: {
-		id: string;
-		title: string;
 		context: string[];
 		expires_at: string;
 		filter_actions: string;
+		id: string;
+		title: string;
 	};
 	keyword_matches: string[];
 	status_matches: string[];
 }
+
+interface FollowedTagHistory {
+	accounts: string;
+	uses: string;
+}
+interface FollowedTag {
+	name: string;
+	history: FollowedTagHistory[];
+}
+
+interface FollowedTagData {
+	accounts: number;
+	days: number;
+	name: string;
+	uses: number;
+}
+interface FollowedTagHistoryData {
+	accounts: number;
+	days: number;
+	uses: number;
+}
+interface FollowedTagDataForAuths {
+	authorization: Authorization;
+	tags: FollowedTagData[];
+}
+
 
 /** @see https://docs.joinmastodon.org/entities/Status/ */
 export interface Status {
