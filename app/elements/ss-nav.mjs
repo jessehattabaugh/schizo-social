@@ -22,7 +22,8 @@ export default function ({ html, state }) {
 							class="button ${timeline == 'public' && 'active'}"
 							>public</a
 						>
-						<a href="/settings" class="button">settings</a>`
+						<a href="/settings" class="button">settings</a>
+						<a href="/followed_tags" class="button">followed_tags</a>`
 				: html`<a href="/login" class="button">login</a>`}
 		</nav>`;
 }
