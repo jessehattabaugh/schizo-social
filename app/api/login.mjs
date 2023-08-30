@@ -17,10 +17,12 @@ export async function post(request) {
 	const { host } = body;
 	try {
 		/** first try to load an existing app from the db */
-		let app = await db.apps.get({ host, scope });
-		// console.debug('🐸', { app, host, scope });
+		const id = `${host}#${redirect_uri}#${scope}#${website}`;
+		let app = await db.apps.get({ id });
+
 		/** @todo test the app to make sure it's still valid, delete it if not */
 		if (!app) {
+			// console.debug('🐸 create new app', { app, host, redirect_uri, scope });
 			// create a new app for this host
 			const body = new URLSearchParams({
 				client_name,
@@ -28,12 +30,13 @@ export async function post(request) {
 				scopes: scope,
 				website,
 			});
+			/** @see https://docs.joinmastodon.org/methods/apps/#create */
 			const response = await fetch(`https://${host}/api/v1/apps`, { method: 'POST', body });
 			if (response.ok) {
 				/** @type {import('../types').AppsResponse} */
 				const data = await response.json();
 				// console.debug('💎 api/login post() fetch success:', data);
-				app = { host, scope, ...data };
+				app = { host, id, redirect_uri, scope, website, ...data };
 				await db.apps.put(app);
 			} else {
 				console.error('🍅 api/login post() fetch failure');
@@ -49,10 +52,9 @@ export async function post(request) {
 		});
 		const location = `https://${host}/oauth/authorize?${params.toString()}`;
 		// console.debug('💸 api/login post() session:', { location, session });
-		return { location, session: { ...session, ...app } };
+		return { location, session: { ...session, ...app, host } };
 	} catch (error) {
 		console.error('⛔api/login post() returning error', error);
 		return { json: { error, host, website, redirect_uri } };
 	}
 }
-

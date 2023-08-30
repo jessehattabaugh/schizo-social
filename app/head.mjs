@@ -6,6 +6,7 @@ export default function Head(arg0) {
 	const { path, session } = req;
 	const { authorizations = [], themeColor = '#ff0000' } = session;
 	store.authorizations = authorizations;
+	store.themeColor = themeColor;
 
 	return `<!DOCTYPE html>
 <html lang="en">
