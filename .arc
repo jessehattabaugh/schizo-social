@@ -18,8 +18,9 @@ apps
 	client_id String
 	client_secret String
 	encrypt true
-	host *String
-	id String
+	host String
+	id *String
 	PointInTimeRecovery true
-	scope **String
+	redirect_uri String
+	scope String
 	vapid_key String
