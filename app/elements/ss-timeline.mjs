@@ -3,7 +3,9 @@ export default function ({ html, state }) {
 	const { error, statusIds = [], nextIds = [], prevIds = [] } = state.store;
 	/** @type {import('../types').StatusIds} */
 	const StatusIds = statusIds;
-	// console.debug('⌛', { error, nextIds, prevIds, scrollToBottom });
+
+	console.debug('⌛ ss-timeline', { error, nextIds, prevIds });
+
 	return html`<style>
 			.h-feed {
 				column-count: 1;
