@@ -5,6 +5,8 @@
 		"@architect/functions": "latest",
 		"@architect/sandbox": "latest",
 		"@enhance/arc-plugin-enhance": "latest",
+		"@enhance/custom-element": "^1.0.1",
+		"@enhance/micromorph-mixin": "^1.0.0",
 		"@enhance/types": "latest",
 		"eslint": "latest",
 		"eslint-config-prettier": "latest",
