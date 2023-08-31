@@ -6,7 +6,7 @@
 		"serviceworker": true,
 		"worker": true
 	},
-	"extends": ["@architect/eslint-config", "eslint:recommended", "prettier"],
+	"extends": [ "eslint:recommended", "prettier"],
 	"parserOptions": {
 		"ecmaFeatures": {
 			"impliedStrict": true
@@ -19,7 +19,6 @@
 		"array-callback-return": "warn",
 		"arrow-body-style": ["warn", "as-needed"],
 		"curly": ["warn", "multi", "consistent"],
-		"filenames/match-regex": ["warn", "^\\$?[a-zA-Z0-9]+([_.-][a-zA-Z0-9]+)*$"],
 		"no-await-in-loop": "warn",
 		"no-constant-binary-expression": "warn",
 		"no-constructor-return": "warn",

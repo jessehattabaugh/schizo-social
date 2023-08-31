@@ -2,7 +2,6 @@
 	"author": "Jesse Hattabaugh<jessehattabaugh@protonmail.com>",
 	"devDependencies": {
 		"@architect/architect": "latest",
-		"@architect/eslint-config": "latest",
 		"@architect/functions": "latest",
 		"@architect/sandbox": "latest",
 		"@enhance/arc-plugin-enhance": "latest",
