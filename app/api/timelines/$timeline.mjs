@@ -50,6 +50,7 @@ async function fetchAllTimelines(request) {
 			);
 			return { access_token, promise };
 		});
+		/** @todo use allSettled and handle error responses */
 		const responses = await Promise.all(promises.map(({ promise }) => promise));
 
 		/** @type {import('../../types').StatusMap} */
