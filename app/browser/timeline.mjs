@@ -1,11 +1,17 @@
 import EnhanceCustomElement from '@enhance/custom-element';
 import MicromorphMixin from '@enhance/micromorph-mixin';
+import Store from '@enhance/store';
 
 import renderTimeline from '../elements/ss-timeline.mjs';
 
+const timelineStore = Store();
 class CustomTimeline extends MicromorphMixin(EnhanceCustomElement) {
 	constructor() {
 		super();
+
+		/** update the DOM when the store updates */
+		timelineStore.subscribe(this.process);
+
 	}
 
 	/**
@@ -16,8 +22,8 @@ class CustomTimeline extends MicromorphMixin(EnhanceCustomElement) {
 		return renderTimeline(args);
 	}
 
-	static get observedAttributes() {
-		return ['test'];
+	disconnectedCallback() {
+		timelineStore.unsubscribe(this.process);
 	}
 }
 
