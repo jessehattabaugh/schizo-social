@@ -2,16 +2,48 @@ import EnhanceCustomElement from '@enhance/custom-element';
 import MicromorphMixin from '@enhance/micromorph-mixin';
 import Store from '@enhance/store';
 
-import renderTimeline from '../elements/ss-timeline.mjs';
+import render from '../elements/ss-timeline.mjs';
 
-const timelineStore = Store();
+const store = Store();
+
+/**
+ * @param {{ data: any; }} event
+ */
+function handleFetcherMessage(event) {
+	const { data } = event;
+	const { type } = data;
+	console.debug('📮 handleMessage', { data, type });
+	switch (type) {
+		case 'INIT':
+			console.debug('🍇 initialize the store', { data, store });
+			store.initialize(data);
+			break;
+		case 'NEXT':
+			console.debug('🍌 appending older statuses to the store', { data, store });
+			store.statuses.push(...data.statuses);
+			store.statusIds.push(...data.statusIds);
+			break;
+		case 'PREV':
+			console.debug('🍎 prepending newer statuses to the store', { data, store });
+			store.statuses.unshift(...data.statuses);
+			store.statusIds.unshift(...data.statusIds);
+			break;
+	}
+}
+
+const fetcher = new Worker('/_public/browser/fetcher.mjs');
+fetcher.addEventListener('message', handleFetcherMessage);
+
+/** initialize the store with data from the api */
+fetcher.postMessage({ type: 'INIT' });
+// @todo pass the initial store data in the page so a second network request isn't needed
+
+
 class CustomTimeline extends MicromorphMixin(EnhanceCustomElement) {
 	constructor() {
 		super();
-
 		/** update the DOM when the store updates */
-		timelineStore.subscribe(this.process);
-
+		store.subscribe(this.process);
 	}
 
 	/**
@@ -19,11 +51,12 @@ class CustomTimeline extends MicromorphMixin(EnhanceCustomElement) {
 	 */
 	render(args) {
 		console.debug('🦤 CustomTimeline rendering', { args });
-		return renderTimeline(args);
+		return render(args);
 	}
 
 	disconnectedCallback() {
-		timelineStore.unsubscribe(this.process);
+		store.unsubscribe(this.process);
+		fetcher.removeEventListener('message', handleFetcherMessage);
 	}
 }
 
