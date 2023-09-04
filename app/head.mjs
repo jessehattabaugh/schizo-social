@@ -13,7 +13,7 @@ export default function Head(arg0) {
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="view-transition" content="same-origin" />
+		<!--<meta name="view-transition" content="same-origin" />-->
 
 		<title>${client_name}${path}</title>
 		<meta name="description" content="mastodon client with a focus on performance" />

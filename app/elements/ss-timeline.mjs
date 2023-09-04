@@ -63,6 +63,7 @@ export default function ({ html, state }) {
 				href="?${new URLSearchParams({
 					prevIds: prevIds.join(','),
 				}).toString()}#bottom"
+				id="prevLink"
 				>^^ Previous/Newer ^^</a
 			>
 		</nav>
@@ -75,6 +76,7 @@ export default function ({ html, state }) {
 				href="?${new URLSearchParams({
 					nextIds: nextIds.join(','),
 				}).toString()}"
+				id="nextLink"
 				name="bottom"
 				>⌄⌄ Next/Older ⌄⌄</a
 			>

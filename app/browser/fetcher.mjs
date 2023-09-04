@@ -8,12 +8,12 @@ const getJSONOpts = {
 };
 
 self.onmessage = async (event) => {
-	console.debug('🌴 handleMessage', { event });
+	// console.debug('🌴 handleMessage', { event });
 	const { data } = event;
 	const { type } = data;
 	switch (type) {
 		case 'INIT':
-			console.debug('🍈 init case', { data, event });
+			console.debug('🍔 fetcher init', { data, event });
 			try {
 				// @ts-ignore No overload matches this call.
 				const response = await fetch('/timelines/home', getJSONOpts);
@@ -25,7 +25,7 @@ self.onmessage = async (event) => {
 			}
 			break;
 		case 'NEXT':
-			console.debug('🍌 next case', { data, event });
+			console.debug('🍗 fetcher next', { data, event });
 			try {
 				// @ts-ignore No overload matches this call.
 				const response = await fetch('/timelines/home', getJSONOpts);
@@ -36,7 +36,7 @@ self.onmessage = async (event) => {
 			}
 			break;
 		case 'PREV':
-			console.debug('🍎 prev case', { data, event });
+			console.debug('🍣 fetcher prev', { data, event });
 			try {
 				// @ts-ignore No overload matches this call.
 				const response = await fetch('/timelines/home', getJSONOpts);

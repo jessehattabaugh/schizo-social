@@ -19,7 +19,7 @@ export default function ({ html, state }) {
 	const authIndex = auths
 		.findIndex(({ access_token }) => access_token === firstAuth.access_token)
 		.toString();
-	// console.debug('🛻 ss-status', { authIndex, auths, firstAuth, id, status });
+	console.debug('🛻 ss-status', { authIndex, auths, firstAuth, id, status });
 
 	const { authorizations } = status;
 	// if status is a reblog, use the reblogged status
