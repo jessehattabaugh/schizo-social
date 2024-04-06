@@ -14,8 +14,8 @@
 		"tiny-json-http": "latest"
 	},
 	"engines": {
-		"node": "~18",
-		"npm": "~9"
+		"node": "~20",
+		"npm": "~10"
 	},
 	"license": "UNLICENSED",
 	"name": "schizo-social",

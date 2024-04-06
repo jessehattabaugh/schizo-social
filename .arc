@@ -4,7 +4,7 @@ schizo-social
 @aws
 architecture arm64
 region us-east-1
-runtime nodejs18.x
+runtime nodejs20.x
 
 @plugins
 enhance/arc-plugin-enhance
@@ -12,6 +12,7 @@ enhance/arc-plugin-enhance
 @static
 compression true
 fingerprint true
+prune true
 
 @tables
 apps
