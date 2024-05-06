@@ -1,5 +1,13 @@
 # Change Log
 
+## May 1st 2024
+
+I lost interest in this project. Mostly because there's not really enough time in a Lambda to fetch multiple timelines, so I felt like a client-side fetch rewrite was necessary. But also, the Fediverse just kinda sucks and I don't want to put that much effort into it.
+
+I still use it though, so I think I should try to make it suck less. My main complaint is the lack of an algorithm. Not that I want some big-tech corpo picking what I can and can't see. I just want more powerful filtering, and classification.
+
+So what I want to do is use the Mastodon authentication that I have already built, and create a page that establishes a client-side websocket connection to stream the firehose of posts from an instance. Then I will store those posts in IndexedDB and create a page that lets me train a classifer on them. Then I can use that classifier to filter my timeline.
+
 ## July 24th 2023
 
 Multi-account authorization works!! It was quite a lot of work, but I think it was worth it! I want managing multiple accounts at the same time to be one of the trademark features of this app. Currently you can just view the home and public timelines of all your accounts together, and page forward and backward through them at the same time.
@@ -47,11 +55,11 @@ I do feel like the ss-status component will need further refactoring to organize
 I took the OAuth login code I wrote and deployed it to schizo.social. Then I made a page that displays `statuses` stored in `state.store`. Finally I created an /api/home get() handler that queries the mastodon host for the user's home feed. That worked so I made it display images and stuff.
 
 Problems
-- Only image attachments are displayed.
-- Reblogs seem to require special handling.
-- All the images load at once which is janky, could lazy load instead.
-- Using the highest resolution images which is probably unecessary for mobile viewports.
-- need to set alt tags and width/height on image tags to prevent jank
+
+-   Only image attachments are displayed.
+-   Reblogs seem to require special handling.
+-   All the images load at once which is janky, could lazy load instead.
+-   Using the highest resolution images which is probably unecessary for mobile viewports.
+-   need to set alt tags and width/height on image tags to prevent jank
 
 The biggest limitation is that there's no infinite scrolling. Refreshing the page will cause another get() call so you get an updated feed each time. I believe I can add a query param to this get() and pass the id of the last status in order to query the next page of statuses.
-
