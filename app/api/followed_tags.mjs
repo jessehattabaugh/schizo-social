@@ -1,3 +1,5 @@
+/** @import {Authorizations, FollowedTag, FollowedTagData, FollowedTagHistoryData} from '../../types' */
+
 import { redirectToLogin } from '../middleware.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn}*/
@@ -6,7 +8,7 @@ async function fetchAllFollowedTagsByAuth(request) {
 		const { session } = request;
 
 		const { authorizations } = session;
-		/** @type {import('../types').Authorizations} */
+		/** @type {Authorizations} */
 		const auths = authorizations;
 
 		const promises = await Promise.allSettled(
@@ -19,12 +21,12 @@ async function fetchAllFollowedTagsByAuth(request) {
 					method: `GET`,
 				});
 				if (response.ok) {
-					/** @type {import('../types').FollowedTag[]} */
+					/** @type {FollowedTag[]} */
 					const data = await response.json();
 					console.debug('🐔 data', { data });
-					/** @type {import('../types').FollowedTagData[]}*/
+					/** @type {FollowedTagData[]}*/
 					const tags = data.map(({ name, history }) => {
-						/** @type {import('../types').FollowedTagHistoryData}*/
+						/** @type {FollowedTagHistoryData}*/
 						const _ = { accounts: 0, uses: 0, days: 0 };
 						const { accounts, uses, days } = history.reduce((_, { accounts, uses }) => {
 							_.accounts += parseInt(accounts);

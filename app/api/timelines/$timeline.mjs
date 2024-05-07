@@ -1,3 +1,5 @@
+/** @import { Authorizations, Statuses, StatusMap, StatusIds } from '../../../types' */
+
 import { redirectToLogin } from '../../middleware.mjs';
 
 /** fetch the most recent posts in the user's home timeline
@@ -19,7 +21,7 @@ async function fetchTimeline(limit, access_token, host, timeline, max_id, min_id
 		method: `GET`,
 	});
 	if (response.ok) {
-		/** @type {Promise<import('../../types').Statuses>} */
+		/** @type {Promise<Statuses>} */
 		const promise = response.json();
 		return promise;
 	} else {
@@ -33,7 +35,7 @@ async function fetchTimeline(limit, access_token, host, timeline, max_id, min_id
 async function fetchAllTimelines(request) {
 	const { session, query, params } = request;
 	const { timeline } = params;
-	/** @type {import('../../types').Authorizations} */
+	/** @type {Authorizations} */
 	const authorizations = session.authorizations || [];
 	const _nextIds = query?.nextIds?.split(',');
 	const _prevIds = query?.prevIds?.split(',');
@@ -52,10 +54,10 @@ async function fetchAllTimelines(request) {
 		});
 		const responses = await Promise.all(promises.map(({ promise }) => promise));
 
-		/** @type {import('../../types').StatusMap} */
+		/** @type {StatusMap} */
 		const statuses = {};
 
-		/** @type {import('../../types').StatusIds} */
+		/** @type {StatusIds} */
 		const statusIds = [];
 
 		/** @type {string[]} */

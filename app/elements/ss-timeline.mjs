@@ -1,7 +1,7 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { error, statusIds = [], nextIds = [], prevIds = [] } = state.store;
-	/** @type {import('../types').StatusIds} */
+	/** @type {import('../../types').StatusIds} */
 	const StatusIds = statusIds;
 	// console.debug('⌛', { error, nextIds, prevIds, scrollToBottom });
 	return html`<style>

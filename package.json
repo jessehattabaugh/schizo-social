@@ -11,7 +11,8 @@
 		"eslint-config-prettier": "latest",
 		"tap-arc": "latest",
 		"tape": "latest",
-		"tiny-json-http": "latest"
+		"tiny-json-http": "latest",
+		"typescript": "next"
 	},
 	"engines": {
 		"node": "~20",

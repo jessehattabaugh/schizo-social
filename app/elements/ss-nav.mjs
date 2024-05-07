@@ -1,7 +1,7 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { authorizations, timeline } = state.store;
-	/** @type {import('../types').Authorizations} */
+	/** @type {import('../../types').Authorizations} */
 	const auths = authorizations;
 	return html` <style>
 			nav {

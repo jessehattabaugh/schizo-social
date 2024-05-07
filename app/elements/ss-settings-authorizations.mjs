@@ -1,7 +1,7 @@
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { store } = state;
-	/** @type {import('../types').Authorizations} */
+	/** @type {import('../../types').Authorizations} */
 	const auths = store.authorizations;
 	// console.debug('🧼', { auths });
 	return html`<style>

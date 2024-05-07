@@ -25,3 +25,6 @@ apps
 	redirect_uri String
 	scope String
 	vapid_key String
+
+@queues
+fetchTimeline

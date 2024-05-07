@@ -1,10 +1,12 @@
+/** @import {TokenResponse, VerifyResponse} from '../../types' */
+
 import { redirect_uri, scope } from '../constants.mjs';
 
 /** accepts a code from the Mastodon auth callback and exchanges it for a token.
  * @type {import('@enhance/types').EnhanceApiFn} */
 export async function get(request) {
 	const { session } = request;
-	/** @type {import('../types').Authorizations} */
+	/** @type {import('../../types').Authorizations} */
 	const authorizations = session.authorizations || [];
 	try {
 		const { code } = request.query;
@@ -22,7 +24,7 @@ export async function get(request) {
 				scope,
 			});
 			const response = await fetch(`https://${host}/oauth/token`, { method: `POST`, body });
-			/** @type {import('../types').TokenResponse} */
+			/** @type {TokenResponse} */
 			const data = await response.json();
 			// console.debug('🍑 token response', { body, data });
 			const { access_token } = data;
@@ -32,7 +34,7 @@ export async function get(request) {
 				const response = await fetch(`https://${host}/api/v1/apps/verify_credentials`, {
 					headers: { Authorization: `Bearer ${access_token}` },
 				});
-				/** @type {import('../types').VerifyResponse} */
+				/** @type {VerifyResponse} */
 				const data = await response.json();
 				// console.debug('🍇 verify response', { data });
 				const { vapid_key } = data;

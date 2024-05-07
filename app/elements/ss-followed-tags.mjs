@@ -2,7 +2,7 @@
  * @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { followed_tags } = state.store;
-	/** @type {import('../types').FollowedTagDataForAuths[]} */
+	/** @type {import('../../types').FollowedTagDataForAuths[]} */
 	const FollowedTags = followed_tags;
 
 	return FollowedTags.map(({ authorization, tags }) => {
