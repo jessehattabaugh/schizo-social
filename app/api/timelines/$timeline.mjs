@@ -1,5 +1,6 @@
 /** @import { Authorizations, Statuses, StatusMap, StatusIds } from '../../../types' */
-
+import arc from '@architect/functions';
+import 
 import { redirectToLogin } from '../../middleware.mjs';
 
 /** fetch the most recent posts in the user's home timeline
@@ -103,4 +104,42 @@ async function fetchAllTimelines(request) {
 	}
 }
 
-export const get = [redirectToLogin, fetchAllTimelines];
+/** publishes to the timelineFetch queue
+ *  * @type {import('@enhance/types').EnhanceApiFn}
+ */
+async function queueTimelineFetches(request) {
+	const { session, query, params } = request;
+	const { timeline } = params;
+	/** @type {Authorizations} */
+	const authorizations = session.authorizations || [];
+	const nextIds = query?.nextIds?.split(',');
+	const prevIds = query?.prevIds?.split(',');
+	console.debug('🛳️ queueTimelineFetches', { authorizations, nextIds, prevIds });
+	try {
+		for (let i = 0, n = authorizations.length; i < n; i++) {
+			const { access_token, host } = authorizations[i];
+			const max_id = nextIds?.[i];
+			const min_id = prevIds?.[i];
+			const publishResponse = await arc.queues.publish({
+				name: 'timelineFetch',
+				payload: { access_token, host, timeline, max_id, min_id },
+			});
+			console.debug('⚓ timelineFetch published', { publishResponse });
+		}
+	} catch (error) {
+		console.error('☃️ queueTimelineFetches error', { error });
+	} finally {
+		return {};
+	}
+}
+
+/** loads statuses for the timeline from the database
+ * @type {import('@enhance/types').EnhanceApiFn}
+ */
+async function getTimelines(request) {
+	console.debug('📔 getTimelines', { request });
+	/** @todo load statuses from the database */
+	return {};
+}
+
+export const get = [redirectToLogin, queueTimelineFetches, getTimelines];

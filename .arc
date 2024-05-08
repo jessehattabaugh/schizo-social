@@ -27,4 +27,4 @@ apps
 	vapid_key String
 
 @queues
-fetchTimeline
+timelineFetch
