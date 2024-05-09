@@ -1,6 +1,7 @@
 /** @import { Authorizations, Statuses, StatusMap, StatusIds } from '../../../types' */
-import arc from '@architect/functions';
-import 
+//import arc from '@architect/functions';
+import awsLite from '@aws-lite/client';
+const aws = await awsLite({ debug: true, region: 'us-east-1', plugins: [import('@aws-lite/sqs')] });
 import { redirectToLogin } from '../../middleware.mjs';
 
 /** fetch the most recent posts in the user's home timeline
@@ -120,10 +121,17 @@ async function queueTimelineFetches(request) {
 			const { access_token, host } = authorizations[i];
 			const max_id = nextIds?.[i];
 			const min_id = prevIds?.[i];
-			const publishResponse = await arc.queues.publish({
-				name: 'timelineFetch',
-				payload: { access_token, host, timeline, max_id, min_id },
+			const random = Math.random().toString(36).substring(7);
+			const publishResponse = await aws.SQS.SendMessage({
+				MessageBody: 'hello' + Date.now(),
+				QueueUrl: 'https://sqs.us-east-1.amazonaws.com/347151913839/SchizoSocialProduction-TimelineFetchQueue-PS0j0ajUk6VH.fifo',
+				MessageGroupId: 'timelineFetch',
+				MessageDeduplicationId: random,
 			});
+			/*const publishResponse = await arc.queues.publish({
+				name: 'timelineFetch',
+				payload: { access_token, host, timeline, max_id, min_id, random },
+			});*/
 			console.debug('⚓ timelineFetch published', { publishResponse });
 		}
 	} catch (error) {

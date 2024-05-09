@@ -3,6 +3,6 @@
  * @param {import('@architect/functions/types/events').ArcQueues} event
  */
 export async function handler(event) {
-	console.debug('🐕 timelineFetch handler', { event });
+	console.debug('🐕 timelineFetch handler', JSON.stringify(event, null, 2));
 	return;
 }
