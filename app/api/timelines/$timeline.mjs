@@ -1,7 +1,6 @@
 /** @import { Authorizations, Statuses, StatusMap, StatusIds } from '../../../types' */
-//import arc from '@architect/functions';
-import awsLite from '@aws-lite/client';
-const aws = await awsLite({ debug: true, region: 'us-east-1', plugins: [import('@aws-lite/sqs')] });
+import arc from '@architect/functions';
+import
 import { redirectToLogin } from '../../middleware.mjs';
 
 /** fetch the most recent posts in the user's home timeline
