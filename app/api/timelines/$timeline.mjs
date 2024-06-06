@@ -1,35 +1,6 @@
-/** @import { Authorizations, Statuses, StatusMap, StatusIds } from '../../../types' */
+/** @import { Authorizations, StatusMap, StatusIds } from '../../../types' */
 import arc from '@architect/functions';
 import { redirectToLogin } from '../../middleware.mjs';
-
-/** fetch the most recent posts in the user's home timeline
- * @see https://docs.joinmastodon.org/methods/timelines/#home
- * @param {string} limit
- * @param {string} access_token
- * @param {string} host
- * @param {string} timeline
- * @param {string} max_id
- * @param {string} min_id
- */
-async function fetchTimeline(limit, access_token, host, timeline, max_id, min_id) {
-	const params = new URLSearchParams({ limit });
-	if (max_id) params.append('max_id', max_id);
-	if (min_id) params.append('min_id', min_id);
-	// console.debug('🌜fetchTimeline:', { params });
-	const response = await fetch(`https://${host}/api/v1/timelines/${timeline}?${params}`, {
-		headers: { Authorization: `Bearer ${access_token}` },
-		method: `GET`,
-	});
-	if (response.ok) {
-		/** @type {Promise<Statuses>} */
-		const promise = response.json();
-		return promise;
-	} else {
-		throw new Error(
-			`could not fetch ${timeline} from ${host}: ${response.status} ${response.statusText}`,
-		);
-	}
-}
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 async function fetchAllTimelines(request) {
@@ -42,6 +13,8 @@ async function fetchAllTimelines(request) {
 	// console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
 	try {
 		const promises = authorizations.map(({ access_token, host }, i) => {
+			/** @todo replace http fetch with dynamodb lookup */
+			/* @ts-expect-error function moved*/
 			const promise = fetchTimeline(
 				(40 / authorizations.length).toString(),
 				access_token,
@@ -120,10 +93,8 @@ async function queueTimelineFetches(request) {
 			const max_id = nextIds?.[i];
 			const min_id = prevIds?.[i];
 			const random = Math.random().toString(36).substring(7);
-			const publishResponse = await arc.queues.publish({
-				name: 'timelineFetch',
-				payload: { access_token, host, timeline, max_id, min_id, random },
-			});
+			const payload = { access_token, host, timeline, max_id, min_id, random };
+			const publishResponse = await arc.queues.publish({ name: 'timelineFetch', payload });
 			console.debug('⚓ timelineFetch published', { publishResponse });
 		}
 	} catch (error) {
