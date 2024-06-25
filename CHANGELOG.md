@@ -1,5 +1,20 @@
 # Change Log
 
+## May 6th 2024
+
+I lost interest in this project when I realized that just fetching home timelines for two accounts was already sometimes exceeding the Lambda timeout. I considered moving the fetching to the client, but then it didn't make much sense to use a backend at all. The alternative is to use a queue to fetch the timelines and stream them to the frontend over a websocket, but that means client-side rendering too.
+
+I think I'll give the websocket thing a try.
+
+1) publish a `fetchStatuses` event to SQS
+2) move the fetching code from the GET handler to the queue function
+3) when fetches complete insert statuses into DDB
+4) update the initial page to fetch posts from the database instead of the network
+5) add a client side script that connects to a websocket, handling disconnects and reconnects
+6) create a table stream that listens for new statuses that arrive in the database, render them, and send them to the client over the websocket
+7) append the statuses to the timeline when they are recieved by the client
+8) attach click handlers to the "next" and "prev" links that will send a message to the websocket to fetch the next/prev page of statuses
+
 ## July 24th 2023
 
 Multi-account authorization works!! It was quite a lot of work, but I think it was worth it! I want managing multiple accounts at the same time to be one of the trademark features of this app. Currently you can just view the home and public timelines of all your accounts together, and page forward and backward through them at the same time.

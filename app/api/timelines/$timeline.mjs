@@ -1,45 +1,20 @@
+/**  @import { Authorizations, StatusMap, StatusIds } from '../../../types' */
+import arc from '@architect/functions';
 import { redirectToLogin } from '../../middleware.mjs';
-
-/** fetch the most recent posts in the user's home timeline
- * @see https://docs.joinmastodon.org/methods/timelines/#home
- * @param {string} limit
- * @param {string} access_token
- * @param {string} host
- * @param {string} timeline
- * @param {string} max_id
- * @param {string} min_id
- */
-async function fetchTimeline(limit, access_token, host, timeline, max_id, min_id) {
-	const params = new URLSearchParams({ limit });
-	if (max_id) params.append('max_id', max_id);
-	if (min_id) params.append('min_id', min_id);
-	// console.debug('🌜fetchTimeline:', { params });
-	const response = await fetch(`https://${host}/api/v1/timelines/${timeline}?${params}`, {
-		headers: { Authorization: `Bearer ${access_token}` },
-		method: `GET`,
-	});
-	if (response.ok) {
-		/** @type {Promise<import('../../types').Statuses>} */
-		const promise = response.json();
-		return promise;
-	} else {
-		throw new Error(
-			`could not fetch ${timeline} from ${host}: ${response.status} ${response.statusText}`,
-		);
-	}
-}
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
 async function fetchAllTimelines(request) {
 	const { session, query, params } = request;
 	const { timeline } = params;
-	/** @type {import('../../types').Authorizations} */
+	/** @type {Authorizations} */
 	const authorizations = session.authorizations || [];
 	const _nextIds = query?.nextIds?.split(',');
 	const _prevIds = query?.prevIds?.split(',');
 	// console.debug('🏠fetchAllTimelines', { authorizations, _nextIds, _prevIds });
 	try {
 		const promises = authorizations.map(({ access_token, host }, i) => {
+			/** @todo replace http fetch with dynamodb lookup */
+			/* @ts-expect-error function moved*/
 			const promise = fetchTimeline(
 				(40 / authorizations.length).toString(),
 				access_token,
@@ -52,10 +27,10 @@ async function fetchAllTimelines(request) {
 		});
 		const responses = await Promise.all(promises.map(({ promise }) => promise));
 
-		/** @type {import('../../types').StatusMap} */
+		/** @type {StatusMap} */
 		const statuses = {};
 
-		/** @type {import('../../types').StatusIds} */
+		/** @type {StatusIds} */
 		const statusIds = [];
 
 		/** @type {string[]} */
@@ -101,4 +76,50 @@ async function fetchAllTimelines(request) {
 	}
 }
 
-export const get = [redirectToLogin, fetchAllTimelines];
+/** publishes an event to the timelineFetch queue for each of a user's current authorizations that
+ * fetches the most recent statuses for that timeline
+ * @type {import('@enhance/types').EnhanceApiFn}
+ */
+async function queueTimelineFetches(request) {
+	const { session, params } = request;
+	const { timeline } = params;
+	/** @type {Authorizations} */
+	const authorizations = session.authorizations || [];
+	console.debug('🛳️ queueTimelineFetches', { authorizations, timeline });
+	try {
+		for (let i = 0, n = authorizations.length; i < n; i++) {
+			const { access_token, host } = authorizations[i];
+			// queue events with a random string to prevent culling by the queue
+			const random = Math.random().toString(36).substring(7);
+			const payload = { access_token, host, timeline, random };
+			const publishResponse = await arc.queues.publish({ name: 'timelineFetch', payload });
+			console.debug('⚓ timelineFetch published', { publishResponse });
+		}
+	} catch (error) {
+		console.error('☃️ queueTimelineFetches error', { error });
+	} finally {
+		return {};
+	}
+}
+
+/** loads statuses for the timeline from the database
+ * @type {import('@enhance/types').EnhanceApiFn}
+ */
+async function getStatuses(request) {
+	const db = await arc.tables();
+	const { session, params } = request;
+	const { timeline } = params;
+	/** @type {Authorizations} */
+	const authorizations = session.authorizations || [];
+	console.debug('📔 getStatuses', { authorizations, timeline });
+	try {
+		const statuses = await db.statuses.query({ timeline });
+		console.debug('🙌 successfully queried statuses from database', { statuses, timeline });
+		return { json: { statuses, timeline } };
+	} catch (error) {
+		console.error('🚨 error getting statuses', { error });
+		return { json: { error: error.message, timeline } };
+	}
+}
+
+export const get = [redirectToLogin, queueTimelineFetches, getStatuses];

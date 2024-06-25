@@ -1,3 +1,5 @@
+/** @import {Authorizations, Status} from '../../types' */
+
 import { redirectToLogin } from '../middleware.mjs';
 
 /** @type {import('@enhance/types').EnhanceApiFn} */
@@ -6,7 +8,7 @@ async function fetchStatus(req) {
 		const { session, query } = req;
 		const { authIndex, id } = query;
 
-		/** @type {import('../types').Authorizations} */
+		/** @type {Authorizations} */
 		const authorizations = session.authorizations || [];
 		// console.debug('🐛', { authorizations, id });
 		const auth = authorizations[parseInt(authIndex)];
@@ -18,7 +20,7 @@ async function fetchStatus(req) {
 			method: `GET`,
 		});
 
-		/** @type {import('../types').Status} */
+		/** @type {Status} */
 		const details = await response.json();
 		details.authorizations = [auth];
 		// console.debug('🦋 status:get()', { auth, details });

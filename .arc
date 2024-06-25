@@ -16,12 +16,24 @@ prune true
 
 @tables
 apps
+	encrypt true
+	PointInTimeRecovery true
+	id *String
 	client_id String
 	client_secret String
-	encrypt true
 	host String
-	id *String
-	PointInTimeRecovery true
 	redirect_uri String
 	scope String
 	vapid_key String
+
+statuses
+	encrypt true
+	PointInTimeRecovery true
+	id *String
+	content String
+	created_at String
+	timeline String
+	uri String
+
+@queues
+timelineFetch

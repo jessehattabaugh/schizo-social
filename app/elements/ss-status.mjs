@@ -1,14 +1,16 @@
+/** @import {Authorizations, Status, StatusMap} from '../../types' */
+
 /** @type {import('@enhance/types').EnhanceElemFn} */
 export default function ({ html, state }) {
 	const { attrs, store } = state;
 
-	/** @type {import('../types').Authorizations} */
+	/** @type {Authorizations} */
 	const auths = store.authorizations;
 
-	/** @type {import('../types').Status} */
+	/** @type {Status} */
 	const Details = store.details;
 
-	/** @type {import('../types').StatusMap} */
+	/** @type {StatusMap} */
 	const Statuses = store.statuses;
 
 	/** @type {string} */

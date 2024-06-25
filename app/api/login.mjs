@@ -33,7 +33,7 @@ export async function post(request) {
 			/** @see https://docs.joinmastodon.org/methods/apps/#create */
 			const response = await fetch(`https://${host}/api/v1/apps`, { method: 'POST', body });
 			if (response.ok) {
-				/** @type {import('../types').AppsResponse} */
+				/** @type {import('../../types').AppsResponse} */
 				const data = await response.json();
 				// console.debug('💎 api/login post() fetch success:', data);
 				app = { host, id, redirect_uri, scope, website, ...data };
