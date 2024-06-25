@@ -1,4 +1,4 @@
-/** @import { Authorizations, StatusMap, StatusIds } from '../../../types' */
+/**  @import { Authorizations, StatusMap, StatusIds } from '../../../types' */
 import arc from '@architect/functions';
 import { redirectToLogin } from '../../middleware.mjs';
 
@@ -76,24 +76,22 @@ async function fetchAllTimelines(request) {
 	}
 }
 
-/** publishes to the timelineFetch queue
- *  * @type {import('@enhance/types').EnhanceApiFn}
+/** publishes an event to the timelineFetch queue for each of a user's current authorizations that
+ * fetches the most recent statuses for that timeline
+ * @type {import('@enhance/types').EnhanceApiFn}
  */
 async function queueTimelineFetches(request) {
-	const { session, query, params } = request;
+	const { session, params } = request;
 	const { timeline } = params;
 	/** @type {Authorizations} */
 	const authorizations = session.authorizations || [];
-	const nextIds = query?.nextIds?.split(',');
-	const prevIds = query?.prevIds?.split(',');
-	console.debug('🛳️ queueTimelineFetches', { authorizations, nextIds, prevIds });
+	console.debug('🛳️ queueTimelineFetches', { authorizations, timeline });
 	try {
 		for (let i = 0, n = authorizations.length; i < n; i++) {
 			const { access_token, host } = authorizations[i];
-			const max_id = nextIds?.[i];
-			const min_id = prevIds?.[i];
+			// queue events with a random string to prevent culling by the queue
 			const random = Math.random().toString(36).substring(7);
-			const payload = { access_token, host, timeline, max_id, min_id, random };
+			const payload = { access_token, host, timeline, random };
 			const publishResponse = await arc.queues.publish({ name: 'timelineFetch', payload });
 			console.debug('⚓ timelineFetch published', { publishResponse });
 		}
@@ -107,10 +105,21 @@ async function queueTimelineFetches(request) {
 /** loads statuses for the timeline from the database
  * @type {import('@enhance/types').EnhanceApiFn}
  */
-async function getTimelines(request) {
-	console.debug('📔 getTimelines', { request });
-	/** @todo load statuses from the database */
-	return {};
+async function getStatuses(request) {
+	const db = await arc.tables();
+	const { session, params } = request;
+	const { timeline } = params;
+	/** @type {Authorizations} */
+	const authorizations = session.authorizations || [];
+	console.debug('📔 getStatuses', { authorizations, timeline });
+	try {
+		const statuses = await db.statuses.query({ timeline });
+		console.debug('🙌 successfully queried statuses from database', { statuses, timeline });
+		return { json: { statuses, timeline } };
+	} catch (error) {
+		console.error('🚨 error getting statuses', { error });
+		return { json: { error: error.message, timeline } };
+	}
 }
 
-export const get = [redirectToLogin, queueTimelineFetches, getTimelines];
+export const get = [redirectToLogin, queueTimelineFetches, getStatuses];

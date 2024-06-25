@@ -11,18 +11,15 @@ export async function handler(event) {
 	const { Records } = event;
 	for (const { body } of Records) {
 		const payload = JSON.parse(body);
-		const { access_token, host, timeline, max_id, min_id } = payload;
-		console.debug('💽 timelineFetch queue event handler', { payload });
+		const { access_token, host, timeline } = payload;
+		//console.debug('💽 timelineFetch queue event handler', { payload });
 		const headers = { Authorization: `Bearer ${access_token}` };
-		const limit = '40';
-		const params = new URLSearchParams({ limit });
-		if (max_id) params.append('max_id', max_id);
-		if (min_id) params.append('min_id', min_id);
+		const params = new URLSearchParams({ limit: '40' });
 
 		/** @see https://docs.joinmastodon.org/methods/timelines/ */
 		const url = `https://${host}/api/v1/timelines/${timeline}?${params}`;
 
-		console.debug('🌜 fetching...', { headers, limit, params, url });
+		console.debug('🌜 fetching timeline...', { headers, params, url });
 		try {
 			const response = await fetch(url, { headers, method: 'GET' });
 			if (response.ok) {
@@ -31,19 +28,22 @@ export async function handler(event) {
 				console.debug(`🌛 fetched ${statuses.length} statuses`);
 				for (let statusData of statuses) {
 					console.debug('📤 storing', { statusData });
-					const { content, created, created_at, id, spoiler_text, url, uri, visibility, ...unused } =
-						statusData;
-					const status = {
+					const {
 						content,
 						created_at,
-						created,
+						id,
+						uri,
+						...unused
+					} = statusData;
+
+					const status = {
+						access_token,
+						content,
+						created_at,
 						host,
 						id,
-						spoiler_text,
 						timeline,
 						uri,
-						url,
-						visibility,
 					};
 					console.debug('🌞 putting', { status, unused });
 					const putResponse = await db.statuses.put(status);

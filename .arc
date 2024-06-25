@@ -32,13 +32,8 @@ statuses
 	id *String
 	content String
 	created_at String
-	created Number
-	host String
-	spoiler_text String
 	timeline String
-	url String
 	uri String
-	visibility String
 
 @queues
 timelineFetch
