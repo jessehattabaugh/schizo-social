@@ -3,10 +3,20 @@
 		"@eslint/compat": "latest",
 		"@eslint/eslintrc": "latest",
 		"@eslint/js": "latest",
+		"aws-cdk": "latest",
+		"aws-cdk-lib": "latest",
+		"constructs": "latest",
 		"eslint": "latest",
-		"globals": "latest"
+		"globals": "latest",
+		"serve": "latest"
 	},
 	"name": "schizo-social",
-	"scripts": {},
+	"scripts": {
+		"bootstrap": "cdk bootstrap",
+		"deploy": "cdk deploy",
+		"destroy": "cdk destroy",
+		"start": "serve www",
+		"synth": "cdk synth"
+	},
 	"type": "module"
 }
