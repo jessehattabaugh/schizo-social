@@ -1,32 +1,12 @@
 {
-	"author": "Jesse Hattabaugh<jessehattabaugh@protonmail.com>",
 	"devDependencies": {
-		"@architect/architect": "latest",
-		"@architect/eslint-config": "latest",
-		"@architect/functions": "latest",
-		"@architect/sandbox": "latest",
-		"@enhance/arc-plugin-enhance": "latest",
-		"@enhance/types": "latest",
+		"@eslint/compat": "latest",
+		"@eslint/eslintrc": "latest",
+		"@eslint/js": "latest",
 		"eslint": "latest",
-		"eslint-config-prettier": "latest",
-		"tap-arc": "latest",
-		"tape": "latest",
-		"tiny-json-http": "latest"
+		"globals": "latest"
 	},
-	"engines": {
-		"node": "~20",
-		"npm": "~10"
-	},
-	"license": "UNLICENSED",
 	"name": "schizo-social",
-	"private": true,
-	"scripts": {
-		"clean": "git clean -fdx",
-		"kill": "npx kill-port 3333",
-		"prod": "arc deploy --production",
-		"stage": "arc deploy",
-		"start": "npm run kill && arc sandbox",
-		"test": "tape 'test.mjs' | tap-arc"
-	},
-	"version": "0.0.0"
+	"scripts": {},
+	"type": "module"
 }
