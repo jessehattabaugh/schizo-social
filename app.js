@@ -20,12 +20,11 @@ class WWWStack extends Stack {
 
 		// Create an S3 bucket that hosts a website
 		const destinationBucket = new Bucket(this, 'WWWBucket', {
-			websiteIndexDocument: 'index.html',
-			blockPublicAccess: BlockPublicAccess.NONE,
-
-			// Optionally, remove the bucket on stack removal
-			removalPolicy: RemovalPolicy.DESTROY,
 			autoDeleteObjects: true,
+			blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
+			publicReadAccess: true,
+			removalPolicy: RemovalPolicy.DESTROY,
+			websiteIndexDocument: 'index.html',
 		});
 
 		// Deploy files in ./www to the bucket
